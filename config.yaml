@@ -1,3 +1,4 @@
+#OK (Below)
 # This file is used to set up the parameters for data loading, logging, and other settings.
 
 data_source:
@@ -23,168 +24,179 @@ data_split:
 model:
   active: linear_regression
 
+
 raw_features:
   - PID
-  - MS SubClass
-  - MS Zoning
-  - Lot Frontage
-  - Lot Area
+  - "MS SubClass"
+  - "MS Zoning"
+  - "Lot Frontage"
+  - "Lot Area"
   - Street
   - Alley
-  - Lot Shape
-  - Land Contour
+  - "Lot Shape"
+  - "Land Contour"
   - Utilities
-  - Lot Config
-  - Land Slope
+  - "Lot Config"
+  - "Land Slope"
   - Neighborhood
-  - Condition 1
-  - Condition 2
-  - Bldg Type
-  - House Style
-  - Overall Qual
-  - Overall Cond
-  - Year Built
-  - Year Remod/Add
-  - Roof Style
-  - Roof Matl
-  - Exterior 1st
-  - Exterior 2nd
-  - Mas Vnr Type
-  - Mas Vnr Area
-  - Exter Qual
-  - Exter Cond
+  - "Condition 1"
+  - "Condition 2"
+  - "Bldg Type"
+  - "House Style"
+  - "Overall Qual"
+  - "Overall Cond"
+  - "Year Built"
+  - "Year Remod/Add"
+  - "Roof Style"
+  - "Roof Matl"
+  - "Exterior 1st"
+  - "Exterior 2nd"
+  - "Mas Vnr Type"
+  - "Mas Vnr Area"
+  - "Exter Qual"
+  - "Exter Cond"
   - Foundation
-  - Bsmt Qual
-  - Bsmt Cond
-  - Bsmt Exposure
-  - BsmtFin Type 1
-  - BsmtFin SF 1
-  - BsmtFin Type 2
-  - BsmtFin SF 2
-  - Bsmt Unf SF
-  - Total Bsmt SF
+  - "Bsmt Qual"
+  - "Bsmt Cond"
+  - "Bsmt Exposure"
+  - "BsmtFin Type 1"
+  - "BsmtFin SF 1"
+  - "BsmtFin Type 2"
+  - "BsmtFin SF 2"
+  - "Bsmt Unf SF"
+  - "Total Bsmt SF"
   - Heating
-  - Heating QC
-  - Central Air
+  - "Heating QC"
+  - "Central Air"
   - Electrical
-  - 1st Flr SF
-  - 2nd Flr SF
-  - Low Qual Fin SF
-  - Gr Liv Area
-  - Bsmt Full Bath
-  - Bsmt Half Bath
-  - Full Bath
-  - Half Bath
-  - Bedroom AbvGr
-  - Kitchen AbvGr
-  - Kitchen Qual
-  - TotRms AbvGrd
+  - "1st Flr SF"
+  - "2nd Flr SF"
+  - "Low Qual Fin SF"
+  - "Gr Liv Area"
+  - "Bsmt Full Bath"
+  - "Bsmt Half Bath"
+  - "Full Bath"
+  - "Half Bath"
+  - "Bedroom AbvGr"
+  - "Kitchen AbvGr"
+  - "Kitchen Qual"
+  - "TotRms AbvGr"
   - Functional
   - Fireplaces
-  - Fireplace Qu
-  - Garage Type
-  - Garage Yr Blt
-  - Garage Finish
-  - Garage Cars
-  - Garage Area
-  - Garage Qual
-  - Garage Cond
-  - Paved Drive
-  - Wood Deck SF
-  - Open Porch SF
-  - Enclosed Porch
-  - 3Ssn Porch
-  - Screen Porch
-  - Pool Area
-  - Pool QC
+  - "Fireplace Qu"
+  - "Garage Type"
+  - "Garage Yr Blt"
+  - "Garage Finish"
+  - "Garage Cars"
+  - "Garage Area"
+  - "Garage Qual"
+  - "Garage Cond"
+  - "Paved Drive"
+  - "Wood Deck SF"
+  - "Open Porch SF"
+  - "Enclosed Porch"
+  - "3Ssn Porch"
+  - "Screen Porch"
+  - "Pool Area"
+  - "Pool QC"
   - Fence
-  - Misc Feature
-  - Misc Val
-  - Mo Sold
-  - Yr Sold
-  - Sale Type
-  - Sale Condition
+  - "Misc Feature"
+  - "Misc Val"
+  - "Mo Sold"
+  - "Yr Sold"
+  - "Sale Type"
+  - "Sale Condition"
   - SalePrice
+
 
 features:
   continuous:
-    - Lot Area #ok -tick
-    - Year Built #ok -tick
-    - Year Remod/Add #ok -tick
-    - Mas Vnr Area #ok -tick
-    - BsmtFin SF 1 #ok -tick
-    - BsmtFin SF 2 #ok -tick
-    - Bsmt Unf SF #ok -tick
-    - Total Bsmt SF #ok -tick
-    - 1st Flr SF #ok -tick
-    - 2nd Flr SF #ok -tick
-    - Low Qual Fin SF #ok -tick
-    - Gr Liv Area #ok -tick
-    - Garage Area #ok -tick
-    - Wood Deck SF #ok -tick
-    - Open Porch SF #ok -tick
-    - Enclosed Porch #ok -tick
-    - 3Ssn Porch #ok -tick
-    - Screen Porch #ok -tick
-    - Lot Frontage #ok -tick
-    - Garage Yr Blt #ok -tick
-  categorical:
-    - MS SubClass #ok
-    - MS Zoning #ok
-    - Street #ok
-    - Lot Shape #ok
-    - Land Contour #ok
-    - Utilities #ok
-    - Lot Config #ok
-    - Land Slope #ok
-    - Neighborhood #ok
-    - Condition 1 #ok
-    - Condition 2 #ok
-    - Bldg Type #ok
-    - House Style #ok
-    - Roof Style #ok
-    - Roof Matl #ok
-    - Exterior 1st #ok
-    - Exterior 2nd #ok
-    - Mas Vnr Type #ok
-    - Exter Qual #ok
-    - Exter Cond #ok
-    - Foundation #ok
-    - Bsmt Qual #ok
-    - Bsmt Cond #ok
-    - Bsmt Exposure #ok
-    - BsmtFin Type 1 #ok
-    - BsmtFin Type 2 #ok
-    - Heating #ok
-    - Heating QC #ok
-    - Central Air #ok
-    - Electrical #ok
-    - Kitchen Qual #ok
-    - Functional #ok
-    - Fireplace Qu #ok
-    - Garage Type #ok
-    - Garage Finish #ok
-    - Garage Qual #ok
-    - Garage Cond #ok
-    - Paved Drive #ok
-    - Sale Type #ok
-    - Sale Condition #ok
-  ordinal:
-    - Overall Qual #in nums
-    - Overall Cond #in nums
-    - Garage Cars #in nums
-    - Full Bath #in numns
-    - Half Bath #in nums
-    - TotRms AbvGrd
-    - Bedroom AbvGr #in nums
-    - Kitchen AbvGr #in nums
-    - Bsmt Full Bath #in nums
-    - Bsmt Half Bath #in nums
-    - Fireplaces #in nums
-    - Mo Sold #check
-    - Yr Sold #check
+    - lot_area
+    - year_built
+    - year_remod_add
+    - mas_vnr_area
+    - bsmtfin_sf_1
+    - bsmtfin_sf_2
+    - bsmt_unf_sf
+    - total_bsmt_sf
+    - 1st_flr_sf
+    - 2nd_flr_sf
+    - low_qual_fin_sf
+    - gr_liv_area
+    - garage_area
+    - wood_deck_sf
+    - open_porch_sf
+    - enclosed_porch
+    - 3ssn_porch
+    - screen_porch
+    - lot_frontage
+    - garage_yr_blt
+    - pool_area
 
-target: SalePrice
+  categorical:
+    - ms_subclass
+    - ms_zoning
+    - street
+    - lot_shape
+    - land_contour
+    - utilities
+    - lot_config
+    - land_slope
+    - neighborhood
+    - condition_1
+    - condition_2
+    - bldg_type
+    - house_style
+    - roof_style
+    - roof_matl
+    - exterior_1st
+    - exterior_2nd
+    - mas_vnr_type
+    - exter_qual
+    - exter_cond
+    - foundation
+    - bsmt_qual
+    - bsmt_cond
+    - bsmt_exposure
+    - bsmtfin_type_1
+    - bsmtfin_type_2
+    - heating
+    - heating_qc
+    - central_air
+    - electrical
+    - kitchen_qual
+    - functional
+    - fireplace_qu
+    - garage_type
+    - garage_finish
+    - garage_qual
+    - garage_cond
+    - paved_drive
+    - sale_type
+    - sale_condition
+
+  ordinal:
+    - overall_qual
+    - overall_cond
+    - garage_cars
+    - full_bath
+    - half_bath
+    - totrms_abvgrd
+    - bedroom_abvgr
+    - kitchen_abvgr
+    - bsmt_full_bath
+    - bsmt_half_bath
+    - fireplaces
+    - yr_sold #UNSURE --> Keep in ordinal
+    #- mo_sold #UNSURE --> Feature engineer for seasonality (cos and sin)
+  
+  #engineered:
+    #- mo_sold_sin?
+    #- mo_sold_cos?
+    #could also bucket to include seasons for mo_sold!!
+
+
+target: saleprice
 
 metrics:
   - MSE
@@ -193,44 +205,142 @@ metrics:
   - r2
 
 preprocessing:
+  rename_columns:
+    PID: pid
+    "MS SubClass": ms_subclass
+    "MS Zoning": ms_zoning
+    "Lot Frontage": lot_frontage
+    "Lot Area": lot_area
+    Street: street
+    Alley: alley
+    "Lot Shape": lot_shape
+    "Land Contour": land_contour
+    Utilities: utilities
+    "Lot Config": lot_config
+    "Land Slope": land_slope
+    Neighborhood: neighborhood
+    "Condition 1": condition_1
+    "Condition 2": condition_2
+    "Bldg Type": bldg_type
+    "House Style": house_style
+    "Overall Qual": overall_qual
+    "Overall Cond": overall_cond
+    "Year Built": year_built
+    "Year Remod/Add": year_remod_add
+    "Roof Style": roof_style
+    "Roof Matl": roof_matl
+    "Exterior 1st": exterior_1st
+    "Exterior 2nd": exterior_2nd
+    "Mas Vnr Type": mas_vnr_type
+    "Mas Vnr Area": mas_vnr_area
+    "Exter Qual": exter_qual
+    "Exter Cond": exter_cond
+    "Foundation": foundation
+    "Bsmt Qual": bsmt_qual
+    "Bsmt Cond": bsmt_cond
+    "Bsmt Exposure": bsmt_exposure
+    "BsmtFin Type 1": bsmtfin_type_1
+    "BsmtFin SF 1": bsmtfin_sf_1
+    "BsmtFin Type 2": bsmtfin_type_2
+    "BsmtFin SF 2": bsmtfin_sf_2
+    "Bsmt Unf SF": bsmt_unf_sf
+    "Total Bsmt SF": total_bsmt_sf
+    Heating: heating
+    "Heating QC": heating_qc
+    "Central Air": central_air
+    Electrical: electrical
+    "1st Flr SF": 1st_flr_sf
+    "2nd Flr SF": 2nd_flr_sf
+    "Low Qual Fin SF": low_qual_fin_sf
+    "Gr Liv Area": gr_liv_area
+    "Bsmt Full Bath": bsmt_full_bath
+    "Bsmt Half Bath": bsmt_half_bath
+    "Full Bath": full_bath
+    "Half Bath": half_bath
+    "Bedroom AbvGr": bedroom_abvgr
+    "Kitchen AbvGr": kitchen_abvgr
+    "Kitchen Qual": kitchen_qual
+    "TotRms AbvGr": totrms_abvgr
+    Functional: functional
+    Fireplaces: fireplaces
+    "Fireplace Qu": fireplace_qu
+    "Garage Type": garage_type
+    "Garage Yr Blt": garage_yr_blt
+    "Garage Finish": garage_finish
+    "Garage Cars": garage_cars
+    "Garage Area": garage_area
+    "Garage Qual": garage_qual
+    "Garage Cond": garage_cond
+    "Paved Drive": paved_drive
+    "Wood Deck SF": wood_deck_sf
+    "Open Porch SF": open_porch_sf
+    "Enclosed Porch": enclosed_porch
+    "3Ssn Porch": 3ssn_porch
+    "Screen Porch": screen_porch
+    "Pool Area": pool_area
+    "Pool QC": pool_qc
+    Fence: fence
+    "Misc Feature": misc_feature
+    "Misc Val": misc_val
+    "Mo Sold": mo_sold
+    "Yr Sold": yr_sold
+    "Sale Type": sale_type
+    "Sale Condition": sale_condition
+    SalePrice: saleprice
+
   drop_columns:
-    - Pool QC
-    - Misc Feature
-    - Alley
-    - Fence
-    - Misc Val
+    - pool_qc
+    - mic_feature
+    - alley
+    - fence
+    - misc_val #drop it as it goes hand in hand with misc_feature
+    - mo_sold #Maybe engineer as a feature later on.
+    - lot_frontage #GO OVER!!
+
+  #fillna_groupby:  #MAYBE DROP all rows?
+    #column: lot_frontage
+    #groupby: neighborhood
+    #method: mean
 
   fillna:
     numerical_zero:
-      - BsmtFin SF 1
-      - BsmtFin SF 2
-      - Bsmt Unf SF
-      - Total Bsmt SF
-      - Bsmt Full Bath
-      - Bsmt Half Bath
-      - Mas Vnr Area
-      - Garage Yr Blt
+      - bsmtfin_sf_1
+      - bsmtfin_sf_2
+      - bsmt_unf_sf
+      - total_bsmt_sf
+      - bsmt_full_bath
+      - bsmt_half_bath
+      - mas_vnr_area
+      - garage_yr_blt
+     # - lot_frontage #UNSURE IF KEEP or what to do with this
     categorical_none:
-      - Bsmt Qual
-      - Bsmt Cond
-      - Bsmt Exposure
-      - BsmtFin Type 1
-      - BsmtFin Type 2
-      - Mas Vnr Type
-      - Garage Type
-      - Garage Finish
-      - Garage Qual
-      - Garage Cond
-      - Fireplace Qu
-
-  fillna_groupby:
-    column: Lot Frontage
-    groupby: Neighborhood
-    method: mean
+      - bsmt_qual
+      - bsmt_cond
+      - bsmt_exposure
+      - bsmtfin_type_1
+      - bsmtfin_type_2
+      - mas_vnr_type
+      - garage_type
+      - garage_finish
+      - garage_qual
+      - garage_cond
+      - fireplace_qu
 
   dropna_rows:
-    - Electrical
-    - Garage Cars
+    - electrical
+    - garage_cars
+
+  encoding:
+    one_hot:
+      apply_to: categorical
+      drop: first  # optional: drop one dummy to avoid multicollinearity in linear models
+      handle_unknown: ignore
+
+  scaling:
+    method: standard  # options: standard, minmax
+    apply_to:
+      - continuous
+      - ordinal
 
 artifacts:
   metrics_path: models/metrics.json
@@ -238,40 +348,253 @@ artifacts:
   splits_dir: dataset/splits
   processed_dir: dataset/processed
 
+#go over perhaps
 data_validation:
   enabled: true
   action_on_error: "raise"
   report_path: "logs/validation_report.json"
   schema:
     columns:
-      - name: "Lot Area"
-        dtype: "int"
-        required: true
-        min: 1000
-      - name: "Overall Qual"
-        dtype: "int"
-        required: true
-        min: 1
-        max: 10
-      - name: "Gr Liv Area"
-        dtype: "int"
-        required: true
-        min: 300
-      - name: "SalePrice"
-        dtype: "int"
-        required: true
-        min: 10000
-      - name: "Neighborhood"
-        dtype: "str"
-        required: true
-      - name: "Garage Cars"
-        dtype: "int"
-        required: true
-        min: 0
-        max: 5
-      - name: "Garage Yr Blt"
-        dtype: "int"
-        required: false
-        min: 0
-        max: 2025
-
+    - name: PID
+      dtype: int
+      required: true
+    - name: "Low Qual Fin SF"
+      dtype: int
+      required: true
+    - name: "Gr Liv Area"
+      dtype: int
+      required: true
+    - name: "Full Bath"
+      dtype: int
+      required: true
+    - name: "Half Bath"
+      dtype: int
+      required: true
+    - name: "Bedroom AbvGr"
+      dtype: int
+      required: true
+    - name: "Kitchen AbvGr"
+      dtype: int
+      required: true
+    - name: "TotRms AbvGrd"
+      dtype: int
+      required: true
+    - name: Fireplaces
+      dtype: int
+      required: true
+    - name: "Wood Deck SF"
+      dtype: int
+      required: true
+    - name: "Open Porch SF"
+      dtype: int
+      required: true
+    - name: "Enclosed Porch"
+      dtype: int
+      required: true
+    - name: "3Ssn Porch"
+      dtype: int
+      required: true
+    - name: "Screen Porch"
+      dtype: int
+      required: true
+    - name: "Pool Area"
+      dtype: int
+      required: true
+    - name: "Misc Val"
+      dtype: int
+      required: true
+    - name: "Mo Sold"
+      dtype: int
+      required: true
+    - name: "Yr Sold"
+      dtype: int
+      required: true
+    - name: "2nd Flr SF"
+      dtype: int
+      required: true
+    - name: "1st Flr SF"
+      dtype: int
+      required: true
+    - name: SalePrice
+      dtype: int
+      required: true
+    - name: "Lot Area"
+      dtype: int
+      required: true
+    - name: "Overall Cond"
+      dtype: int
+      required: true
+    - name: "MS SubClass"
+      dtype: int
+      required: true
+    - name: "Overall Qual"
+      dtype: int
+      required: true
+    - name: "Year Remod/Add"
+      dtype: int
+      required: true
+    - name: "Year Built"
+      dtype: int
+      required: true
+    - name: "Bsmt Unf SF"
+      dtype: float
+      required: true
+    - name: "BsmtFin SF 2"
+      dtype: float
+      required: true
+    - name: "BsmtFin SF 1"
+      dtype: float
+      required: true
+    - name: "Garage Area"
+      dtype: float
+      required: true
+    - name: "Bsmt Full Bath"
+      dtype: float
+      required: true
+    - name: "Total Bsmt SF"
+      dtype: float
+      required: true
+    - name: "Garage Cars"
+      dtype: float
+      required: true
+    - name: "Mas Vnr Area"
+      dtype: float
+      required: true
+    - name: "Lot Frontage"
+      dtype: float
+      required: true
+    - name: "Garage Yr Blt"
+      dtype: float
+      required: true
+    - name: "Bsmt Half Bath"
+      dtype: float
+      required: true
+    - name: "Garage Finish"
+      dtype: str
+      required: true
+    - name: "Garage Type"
+      dtype: str
+      required: true
+    - name: "Garage Qual"
+      dtype: str
+      required: true
+    - name: "Roof Style"
+      dtype: str
+      required: true
+    - name: "Paved Drive"
+      dtype: str
+      required: true
+    - name: Utilities
+      dtype: str
+      required: true
+    - name: "Fireplace Qu"
+      dtype: str
+      required: true
+    - name: "Land Contour"
+      dtype: str
+      required: true
+    - name: "Lot Shape"
+      dtype: str
+      required: true
+    - name: Alley
+      dtype: str
+      required: true
+    - name: Street
+      dtype: str
+      required: true
+    - name: "Pool QC"
+      dtype: str
+      required: true
+    - name: Fence
+      dtype: str
+      required: true
+    - name: "Misc Feature"
+      dtype: str
+      required: true
+    - name: "MS Zoning"
+      dtype: str
+      required: true
+    - name: "Sale Type"
+      dtype: str
+      required: true
+    - name: "Garage Cond"
+      dtype: str
+      required: true
+    - name: "Lot Config"
+      dtype: str
+      required: true
+    - name: "Condition 2"
+      dtype: str
+      required: true
+    - name: "Land Slope"
+      dtype: str
+      required: true
+    - name: "Roof Matl"
+      dtype: str
+      required: true
+    - name: "Exterior 1st"
+      dtype: str
+      required: true
+    - name: "Exterior 2nd"
+      dtype: str
+      required: true
+    - name: "Mas Vnr Type"
+      dtype: str
+      required: true
+    - name: "Exter Qual"
+      dtype: str
+      required: true
+    - name: "Exter Cond"
+      dtype: str
+      required: true
+    - name: Foundation
+      dtype: str
+      required: true
+    - name: "Bsmt Qual"
+      dtype: str
+      required: true
+    - name: "Bsmt Cond"
+      dtype: str
+      required: true
+    - name: "Bsmt Exposure"
+      dtype: str
+      required: true
+    - name: "BsmtFin Type 1"
+      dtype: str
+      required: true
+    - name: "BsmtFin Type 2"
+      dtype: str
+      required: true
+    - name: Heating
+      dtype: str
+      required: true
+    - name: "Sale Condition"
+      dtype: str
+      required: true
+    - name: "Central Air"
+      dtype: str
+      required: true
+    - name: Electrical
+      dtype: str
+      required: true
+    - name: "House Style"
+      dtype: str
+      required: true
+    - name: "Bldg Type"
+      dtype: str
+      required: true
+    - name: "Condition 1"
+      dtype: str
+      required: true
+    - name: Neighborhood
+      dtype: str
+      required: true
+    - name: "Kitchen Qual"
+      dtype: str
+      required: true
+    - name: Functional
+      dtype: str
+      required: true
+    - name: "Heating QC"
+      dtype: str
+      required: true
