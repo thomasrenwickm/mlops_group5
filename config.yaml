@@ -1,0 +1,277 @@
+# This file is used to set up the parameters for data loading, logging, and other settings.
+
+data_source:
+  raw_path: "./dataset/raw/AMES_Housing_Data.csv"  # Relative or absolute path to data file
+  processed_path: "./dataset/processed/AMES_Housing_processed_data.csv"  # Path to save processed data
+  type: "csv"                      # Data file type: 'csv' or 'excel'
+  sheet_name: "Sheet1"             # Only used if type == 'excel'
+  delimiter: ","                   # Only used if type == 'csv'
+  header: 0                        # Row number to use as column names (0-indexed), update if needed
+  encoding: "utf-8"                # File encoding (utf-8 covers most cases)
+
+logging:
+  level: "INFO"                         # Logging level: DEBUG (verbose), INFO (default), WARNING, ERROR, CRITICAL
+  log_file: "./logs/main.log"          # File path for log output
+  format: "%(asctime)s - %(levelname)s - %(name)s - %(message)s"  # Log message format
+  datefmt: "%Y-%m-%d %H:%M:%S"          # Date format for logs
+
+data_split:
+  test_size: 0.2
+  valid_size: 0.2
+  random_state: 42
+
+model:
+  active: linear_regression
+
+raw_features:
+  - PID
+  - MS SubClass
+  - MS Zoning
+  - Lot Frontage
+  - Lot Area
+  - Street
+  - Alley
+  - Lot Shape
+  - Land Contour
+  - Utilities
+  - Lot Config
+  - Land Slope
+  - Neighborhood
+  - Condition 1
+  - Condition 2
+  - Bldg Type
+  - House Style
+  - Overall Qual
+  - Overall Cond
+  - Year Built
+  - Year Remod/Add
+  - Roof Style
+  - Roof Matl
+  - Exterior 1st
+  - Exterior 2nd
+  - Mas Vnr Type
+  - Mas Vnr Area
+  - Exter Qual
+  - Exter Cond
+  - Foundation
+  - Bsmt Qual
+  - Bsmt Cond
+  - Bsmt Exposure
+  - BsmtFin Type 1
+  - BsmtFin SF 1
+  - BsmtFin Type 2
+  - BsmtFin SF 2
+  - Bsmt Unf SF
+  - Total Bsmt SF
+  - Heating
+  - Heating QC
+  - Central Air
+  - Electrical
+  - 1st Flr SF
+  - 2nd Flr SF
+  - Low Qual Fin SF
+  - Gr Liv Area
+  - Bsmt Full Bath
+  - Bsmt Half Bath
+  - Full Bath
+  - Half Bath
+  - Bedroom AbvGr
+  - Kitchen AbvGr
+  - Kitchen Qual
+  - TotRms AbvGrd
+  - Functional
+  - Fireplaces
+  - Fireplace Qu
+  - Garage Type
+  - Garage Yr Blt
+  - Garage Finish
+  - Garage Cars
+  - Garage Area
+  - Garage Qual
+  - Garage Cond
+  - Paved Drive
+  - Wood Deck SF
+  - Open Porch SF
+  - Enclosed Porch
+  - 3Ssn Porch
+  - Screen Porch
+  - Pool Area
+  - Pool QC
+  - Fence
+  - Misc Feature
+  - Misc Val
+  - Mo Sold
+  - Yr Sold
+  - Sale Type
+  - Sale Condition
+  - SalePrice
+
+features:
+  continuous:
+    - Lot Area #ok
+    - Year Built #ok 
+    - Year Remod/Add #ok
+    - Mas Vnr Area #ok
+    - BsmtFin SF 1 #ok
+    - BsmtFin SF 2 #ok
+    - Bsmt Unf SF #ok
+    - Total Bsmt SF #ok
+    - 1st Flr SF #ok
+    - 2nd Flr SF #ok
+    - Low Qual Fin SF #ok
+    - Gr Liv Area #ok
+    - Garage Area #ok
+    - Wood Deck SF #ok
+    - Open Porch SF #ok
+    - Enclosed Porch #ok
+    - 3Ssn Porch #ok
+    - Screen Porch #ok
+    - Misc Val #drop!!
+    - Lot Frontage #ok
+    - Garage Yr Blt
+  categorical:
+    - MS Zoning
+    - Street
+    - Lot Shape
+    - Land Contour
+    - Utilities
+    - Lot Config
+    - Land Slope
+    - Neighborhood
+    - Condition 1
+    - Condition 2
+    - Bldg Type
+    - House Style
+    - Roof Style
+    - Roof Matl
+    - Exterior 1st
+    - Exterior 2nd
+    - Mas Vnr Type
+    - Exter Qual
+    - Exter Cond
+    - Foundation
+    - Bsmt Qual
+    - Bsmt Cond
+    - Bsmt Exposure
+    - BsmtFin Type 1
+    - BsmtFin Type 2
+    - Heating
+    - Heating QC
+    - Central Air
+    - Electrical
+    - Kitchen Qual
+    - Functional
+    - Fireplace Qu
+    - Garage Type
+    - Garage Finish
+    - Garage Qual
+    - Garage Cond
+    - Paved Drive
+    - Pool QC
+    - Fence
+    - Misc Feature
+    - Sale Type
+    - Sale Condition
+  ordinal:
+    - Overall Qual
+    - Overall Cond
+    - Garage Cars
+    - Full Bath
+    - Half Bath
+    - Bedroom AbvGr
+    - Kitchen AbvGr
+    - Bsmt Full Bath
+    - Bsmt Half Bath
+    - Fireplaces
+    - Mo Sold #check
+    - Yr Sold #check
+
+target: SalePrice
+
+metrics:
+  - MSE
+  - RMSE
+  - MAE
+  - r2
+
+preprocessing:
+  drop_columns:
+    - Pool QC
+    - Misc Feature
+    - Alley
+    - Fence
+
+  fillna:
+    numerical_zero:
+      - BsmtFin SF 1
+      - BsmtFin SF 2
+      - Bsmt Unf SF
+      - Total Bsmt SF
+      - Bsmt Full Bath
+      - Bsmt Half Bath
+      - Mas Vnr Area
+      - Garage Yr Blt
+    categorical_none:
+      - Bsmt Qual
+      - Bsmt Cond
+      - Bsmt Exposure
+      - BsmtFin Type 1
+      - BsmtFin Type 2
+      - Mas Vnr Type
+      - Garage Type
+      - Garage Finish
+      - Garage Qual
+      - Garage Cond
+      - Fireplace Qu
+
+  fillna_groupby:
+    column: Lot Frontage
+    groupby: Neighborhood
+    method: mean
+
+  dropna_rows:
+    - Electrical
+    - Garage Cars
+
+artifacts:
+  metrics_path: models/metrics.json
+  preprocessing_pipeline: models/preprocessing_pipeline.pkl
+  splits_dir: dataset/splits
+  processed_dir: dataset/processed
+
+data_validation:
+  enabled: true
+  action_on_error: "raise"
+  report_path: "logs/validation_report.json"
+  schema:
+    columns:
+      - name: "Lot Area"
+        dtype: "int"
+        required: true
+        min: 1000
+      - name: "Overall Qual"
+        dtype: "int"
+        required: true
+        min: 1
+        max: 10
+      - name: "Gr Liv Area"
+        dtype: "int"
+        required: true
+        min: 300
+      - name: "SalePrice"
+        dtype: "int"
+        required: true
+        min: 10000
+      - name: "Neighborhood"
+        dtype: "str"
+        required: true
+      - name: "Garage Cars"
+        dtype: "int"
+        required: true
+        min: 0
+        max: 5
+      - name: "Garage Yr Blt"
+        dtype: "int"
+        required: false
+        min: 0
+        max: 2025
