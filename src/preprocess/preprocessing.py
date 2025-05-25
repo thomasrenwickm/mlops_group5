@@ -13,11 +13,13 @@ All steps are dynamically configured via config.yaml
 
 import pandas as pd
 import yaml
+import joblib
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 import logging
+import os
 
 # Load config
 with open("config.yaml", "r") as f:
@@ -64,6 +66,17 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     ordinal = features.get("ordinal", [])
     continuous = features.get("continuous", [])
 
+    # Filter out any columns that no longer exist in the dataframe
+    all_existing_cols = set(df.columns)
+    original_features = set(categorical + ordinal + continuous)
+    missing_cols = original_features - all_existing_cols
+    if missing_cols:
+        logger.warning(f"The following columns listed in config are missing from the DataFrame and will be skipped: {missing_cols}")
+
+    categorical = [col for col in categorical if col in df.columns]
+    ordinal = [col for col in ordinal if col in df.columns]
+    continuous = [col for col in continuous if col in df.columns]
+
     transformers = []
 
     # One-hot encoding
@@ -96,6 +109,12 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     logger.info("Fitting transformers...")
     df_transformed = preprocessor.fit_transform(df)
 
+    # Save pipeline
+    pipeline_path = config["artifacts"].get("preprocessing_pipeline", "models/preprocessing_pipeline.pkl")
+    os.makedirs(os.path.dirname(pipeline_path), exist_ok=True)
+    joblib.dump(preprocessor, pipeline_path)
+    logger.info(f"Saved preprocessing pipeline to {pipeline_path}")
+
     # Get transformed feature names
     try:
         ohe_features = preprocessor.named_transformers_["onehot"].get_feature_names_out(categorical)
@@ -117,5 +136,10 @@ if __name__ == "__main__":
     raw_path = config["data_source"]["raw_path"]
     df = pd.read_csv(raw_path)
     df_processed = preprocess_data(df)
+
+    # Save processed dataframe
+    processed_path = config["data_source"].get("processed_path", "dataset/processed/processed_data.csv")
+    os.makedirs(os.path.dirname(processed_path), exist_ok=True)
+    df_processed.to_csv(processed_path, index=False)
     print("Preprocessing completed. Processed shape:", df_processed.shape)
-    df_processed.head()
+    logger.info(f"Processed data saved to {processed_path}")
