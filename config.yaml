@@ -108,81 +108,79 @@ raw_features:
 
 features:
   continuous:
-    - Lot Area #ok
-    - Year Built #ok 
-    - Year Remod/Add #ok
-    - Mas Vnr Area #ok
-    - BsmtFin SF 1 #ok
-    - BsmtFin SF 2 #ok
-    - Bsmt Unf SF #ok
-    - Total Bsmt SF #ok
-    - 1st Flr SF #ok
-    - 2nd Flr SF #ok
-    - Low Qual Fin SF #ok
-    - Gr Liv Area #ok
-    - Garage Area #ok
-    - Wood Deck SF #ok
-    - Open Porch SF #ok
-    - Enclosed Porch #ok
-    - 3Ssn Porch #ok
-    - Screen Porch #ok
-    - Misc Val #drop!!
-    - Lot Frontage #ok
-    - Garage Yr Blt
+    - Lot Area #ok -tick
+    - Year Built #ok -tick
+    - Year Remod/Add #ok -tick
+    - Mas Vnr Area #ok -tick
+    - BsmtFin SF 1 #ok -tick
+    - BsmtFin SF 2 #ok -tick
+    - Bsmt Unf SF #ok -tick
+    - Total Bsmt SF #ok -tick
+    - 1st Flr SF #ok -tick
+    - 2nd Flr SF #ok -tick
+    - Low Qual Fin SF #ok -tick
+    - Gr Liv Area #ok -tick
+    - Garage Area #ok -tick
+    - Wood Deck SF #ok -tick
+    - Open Porch SF #ok -tick
+    - Enclosed Porch #ok -tick
+    - 3Ssn Porch #ok -tick
+    - Screen Porch #ok -tick
+    - Lot Frontage #ok -tick
+    - Garage Yr Blt #ok -tick
   categorical:
-    - MS Zoning
-    - Street
-    - Lot Shape
-    - Land Contour
-    - Utilities
-    - Lot Config
-    - Land Slope
-    - Neighborhood
-    - Condition 1
-    - Condition 2
-    - Bldg Type
-    - House Style
-    - Roof Style
-    - Roof Matl
-    - Exterior 1st
-    - Exterior 2nd
-    - Mas Vnr Type
-    - Exter Qual
-    - Exter Cond
-    - Foundation
-    - Bsmt Qual
-    - Bsmt Cond
-    - Bsmt Exposure
-    - BsmtFin Type 1
-    - BsmtFin Type 2
-    - Heating
-    - Heating QC
-    - Central Air
-    - Electrical
-    - Kitchen Qual
-    - Functional
-    - Fireplace Qu
-    - Garage Type
-    - Garage Finish
-    - Garage Qual
-    - Garage Cond
-    - Paved Drive
-    - Pool QC
-    - Fence
-    - Misc Feature
-    - Sale Type
-    - Sale Condition
+    - MS SubClass #ok
+    - MS Zoning #ok
+    - Street #ok
+    - Lot Shape #ok
+    - Land Contour #ok
+    - Utilities #ok
+    - Lot Config #ok
+    - Land Slope #ok
+    - Neighborhood #ok
+    - Condition 1 #ok
+    - Condition 2 #ok
+    - Bldg Type #ok
+    - House Style #ok
+    - Roof Style #ok
+    - Roof Matl #ok
+    - Exterior 1st #ok
+    - Exterior 2nd #ok
+    - Mas Vnr Type #ok
+    - Exter Qual #ok
+    - Exter Cond #ok
+    - Foundation #ok
+    - Bsmt Qual #ok
+    - Bsmt Cond #ok
+    - Bsmt Exposure #ok
+    - BsmtFin Type 1 #ok
+    - BsmtFin Type 2 #ok
+    - Heating #ok
+    - Heating QC #ok
+    - Central Air #ok
+    - Electrical #ok
+    - Kitchen Qual #ok
+    - Functional #ok
+    - Fireplace Qu #ok
+    - Garage Type #ok
+    - Garage Finish #ok
+    - Garage Qual #ok
+    - Garage Cond #ok
+    - Paved Drive #ok
+    - Sale Type #ok
+    - Sale Condition #ok
   ordinal:
-    - Overall Qual
-    - Overall Cond
-    - Garage Cars
-    - Full Bath
-    - Half Bath
-    - Bedroom AbvGr
-    - Kitchen AbvGr
-    - Bsmt Full Bath
-    - Bsmt Half Bath
-    - Fireplaces
+    - Overall Qual #in nums
+    - Overall Cond #in nums
+    - Garage Cars #in nums
+    - Full Bath #in numns
+    - Half Bath #in nums
+    - TotRms AbvGrd
+    - Bedroom AbvGr #in nums
+    - Kitchen AbvGr #in nums
+    - Bsmt Full Bath #in nums
+    - Bsmt Half Bath #in nums
+    - Fireplaces #in nums
     - Mo Sold #check
     - Yr Sold #check
 
@@ -200,6 +198,7 @@ preprocessing:
     - Misc Feature
     - Alley
     - Fence
+    - Misc Val
 
   fillna:
     numerical_zero:
