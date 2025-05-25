@@ -129,7 +129,7 @@ features:
     - enclosed_porch
     - 3ssn_porch
     - screen_porch
-    - lot_frontage
+    #- lot_frontage
     - garage_yr_blt
     - pool_area
 
