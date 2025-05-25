@@ -69,7 +69,7 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     # One-hot encoding
     encoding_cfg = config["preprocessing"].get("encoding", {}).get("one_hot", {})
     if encoding_cfg:
-        ohe = OneHotEncoder(handle_unknown=encoding_cfg.get("handle_unknown", "ignore"), drop=encoding_cfg.get("drop", None), sparse=False)
+        ohe = OneHotEncoder(handle_unknown=encoding_cfg.get("handle_unknown", "ignore"), drop=encoding_cfg.get("drop", None), sparse_output=False)
         transformers.append(("onehot", ohe, categorical))
 
     # Scaling
