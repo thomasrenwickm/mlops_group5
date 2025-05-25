@@ -1,0 +1,6 @@
+data_source:
+  raw_path: "dataset/raw/Ames_Housing_Data.csv"
+  type: "csv"
+  delimiter: ","
+  header: 0
+  encoding: "utf-8"
