@@ -28,7 +28,6 @@ with open("config.yaml", "r") as f:
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-
 def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     logger.info("Starting preprocessing...")
 
@@ -67,13 +66,12 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     ordinal = features.get("ordinal", [])
     continuous = features.get("continuous", [])
 
-    # Filter columns that still exist
+    # Filter out any columns that no longer exist in the dataframe
     all_existing_cols = set(df.columns)
     original_features = set(categorical + ordinal + continuous)
     missing_cols = original_features - all_existing_cols
     if missing_cols:
-        logger.warning(
-            f"The following columns listed in config are missing from the DataFrame and will be skipped: {missing_cols}")
+        logger.warning(f"The following columns listed in config are missing from the DataFrame and will be skipped: {missing_cols}")
 
     categorical = [col for col in categorical if col in df.columns]
     ordinal = [col for col in ordinal if col in df.columns]
@@ -82,11 +80,9 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     transformers = []
 
     # One-hot encoding
-    encoding_cfg = config["preprocessing"].get(
-        "encoding", {}).get("one_hot", {})
+    encoding_cfg = config["preprocessing"].get("encoding", {}).get("one_hot", {})
     if encoding_cfg:
-        ohe = OneHotEncoder(handle_unknown=encoding_cfg.get("handle_unknown", "ignore"),
-                            drop=encoding_cfg.get("drop", None), sparse_output=False)
+        ohe = OneHotEncoder(handle_unknown=encoding_cfg.get("handle_unknown", "ignore"), drop=encoding_cfg.get("drop", None), sparse_output=False)
         transformers.append(("onehot", ohe, categorical))
 
     # Scaling
@@ -108,42 +104,41 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
         transformers.append(("scaler", scaler, numeric_cols))
 
     # Column transformer
-    preprocessor = ColumnTransformer(
-        transformers=transformers,
-        remainder='drop'
-    )
+    preprocessor = ColumnTransformer(transformers=transformers, remainder='passthrough')
 
     logger.info("Fitting transformers...")
     df_transformed = preprocessor.fit_transform(df)
 
     # Save pipeline
-    pipeline_path = config["artifacts"].get(
-        "preprocessing_pipeline", "models/preprocessing_pipeline.pkl")
+    pipeline_path = config["artifacts"].get("preprocessing_pipeline", "models/preprocessing_pipeline.pkl")
     os.makedirs(os.path.dirname(pipeline_path), exist_ok=True)
     joblib.dump(preprocessor, pipeline_path)
     logger.info(f"Saved preprocessing pipeline to {pipeline_path}")
 
-    # Get feature names safely
+    # Get transformed feature names
     try:
-        feature_names = preprocessor.get_feature_names_out()
-    except AttributeError:
-        feature_names = [f"f{i}" for i in range(df_transformed.shape[1])]
+        ohe_features = preprocessor.named_transformers_["onehot"].get_feature_names_out(categorical)
+    except:
+        ohe_features = []
 
-    processed_df = pd.DataFrame(df_transformed, columns=feature_names)
-    processed_df.columns = processed_df.columns.astype(str)
+    final_columns = list(ohe_features) + [col for col in df.columns if col not in categorical]
 
+    processed_df = pd.DataFrame(df_transformed, columns=final_columns)
     logger.info("Preprocessing completed.")
 
     return processed_df
 
-
 if __name__ == "__main__":
+    """
+    Entry point for testing preprocessing script manually.
+    Loads data using the configured path and runs preprocessing.
+    """
     raw_path = config["data_source"]["raw_path"]
     df = pd.read_csv(raw_path)
     df_processed = preprocess_data(df)
 
-    processed_path = config["data_source"].get(
-        "processed_path", "dataset/processed/processed_data.csv")
+    # Save processed dataframe
+    processed_path = config["data_source"].get("processed_path", "dataset/processed/processed_data.csv")
     os.makedirs(os.path.dirname(processed_path), exist_ok=True)
     df_processed.to_csv(processed_path, index=False)
     print("Preprocessing completed. Processed shape:", df_processed.shape)
