@@ -196,7 +196,7 @@ features:
     #could also bucket to include seasons for mo_sold!!
 
 
-target: saleprice
+target: SalePrice
 
 metrics:
   - MSE
