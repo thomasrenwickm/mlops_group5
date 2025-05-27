@@ -42,6 +42,13 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         #config = load_config(config_path: str = "config.yaml")
         important_manual_features = config["features"]["most_relevant_features"]
         config_engineer_features = config["features"]["engineered"]
+        print("AAAAAAAAAAAAAAA")
+        print(type(config_engineer_features))
+        all_selected_features = important_manual_features
+        all_selected_features.extend(config_engineer_features)
+        print("AAAAAAAAAAAAAAA")
+        print(all_selected_features)
+        print(type(all_selected_features))
 
         '''important_manual_features = [
             "total_sf", "bathrooms", "house_age", "since_remodel",
@@ -50,7 +57,7 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         ]'''
 
         always_keep = [
-            f for f in important_manual_features if f in x_processed.columns]
+            f for f in all_selected_features if f in x_processed.columns]
 
         selection_input = x_processed.drop(
             columns=always_keep, errors="ignore")
