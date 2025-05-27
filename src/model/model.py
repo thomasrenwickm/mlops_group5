@@ -16,6 +16,8 @@ from sklearn.feature_selection import SelectKBest, f_regression
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from src.preprocess.preprocessing import preprocess_data
 from src.features.features import engineer_features
+from src.evaluation.evaluation import evaluate_regression
+
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -69,13 +71,8 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         model.fit(x_train, y_train)
         logger.info("Model training completed.")
 
-        y_pred = model.predict(x_test)
-        metrics = {
-            "mse": mean_squared_error(y_test, y_pred),
-            "rmse": mean_squared_error(y_test, y_pred, squared=False),
-            "mae": mean_absolute_error(y_test, y_pred),
-            "r2": r2_score(y_test, y_pred)
-        }
+        metrics = evaluate_regression(y_test, y_pred)
+
 
         logger.info("Evaluation metrics: %s", metrics)
 
