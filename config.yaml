@@ -347,6 +347,8 @@ artifacts:
   preprocessing_pipeline: models/preprocessing_pipeline.pkl
   splits_dir: dataset/splits
   processed_dir: dataset/processed
+  selected_features_path: models/selected_features.json
+
 
 #go over perhaps
 data_validation:
