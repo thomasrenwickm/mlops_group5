@@ -36,6 +36,7 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         x_processed = preprocess_data(x_data)
         x_processed.columns = x_processed.columns.astype(str)
 
+# move to config?
         important_manual_features = [
             "total_sf", "bathrooms", "house_age", "since_remodel",
             "overall_qual", "garage_cars", "gr_liv_area",
@@ -52,7 +53,12 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         )].tolist()
 
         selected_features.extend(always_keep)
+        select_features = {selected_features}
+        select_features = [selected_features]
+
+        
         x_final = x_processed[selected_features]
+
 
         split_cfg = config["data_split"]
         x_train, x_test, y_train, y_test = train_test_split(
