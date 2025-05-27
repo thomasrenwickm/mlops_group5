@@ -18,6 +18,7 @@ from src.preprocess.preprocessing import preprocess_data
 from src.features.features import engineer_features
 from src.evaluation.evaluation import evaluate_regression
 
+
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
@@ -71,6 +72,7 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         logger.info("Model training completed.")
 
         metrics = evaluate_regression(y_test, y_pred)
+
 
         logger.info("Evaluation metrics: %s", metrics)
 
