@@ -17,6 +17,8 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from src.preprocess.preprocessing import preprocess_data
 from src.features.features import engineer_features
 from src.evaluation.evaluation import evaluate_regression
+from src.data_load.data_loader import load_config
+
 
 
 logger = logging.getLogger(__name__)
@@ -37,11 +39,16 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         x_processed.columns = x_processed.columns.astype(str)
 
 # move to config?
-        important_manual_features = [
+        #config = load_config(config_path: str = "config.yaml")
+        important_manual_features = config["features"]["most_relevant_features"]
+        config_engineer_features = config["features"]["engineered"]
+
+        '''important_manual_features = [
             "total_sf", "bathrooms", "house_age", "since_remodel",
             "overall_qual", "garage_cars", "gr_liv_area",
             "kitchen_qual", "exter_qual", "neighborhood"
-        ]
+        ]'''
+
         always_keep = [
             f for f in important_manual_features if f in x_processed.columns]
 
@@ -53,8 +60,7 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         )].tolist()
 
         selected_features.extend(always_keep)
-        select_features = {selected_features}
-        select_features = [selected_features]
+        selected_features = list(set(selected_features)) # Make sure we dont have repeated features
 
         
         x_final = x_processed[selected_features]
@@ -76,7 +82,7 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
 
         model.fit(x_train, y_train)
         logger.info("Model training completed.")
-
+        y_pred = model.predict(x_test)
         metrics = evaluate_regression(y_test, y_pred)
 
 

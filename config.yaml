@@ -190,12 +190,21 @@ features:
     - yr_sold #UNSURE --> Keep in ordinal
     #- mo_sold #UNSURE --> Feature engineer for seasonality (cos and sin)
   
-  #engineered:
-    #- mo_sold_sin?
-    #- mo_sold_cos?
-    #could also bucket to include seasons for mo_sold!!
+  engineered:
+    - total_sf 
+    - bathrooms
+    - house_age
+    - since_remodel
 
 
+  most_relevant_features:
+    - overall_qual
+    - garage_cars
+    - gr_liv_area
+    - kitchen_qual
+    - exter_qual
+    - neighborhood
+        
 target: SalePrice
 
 metrics:
@@ -296,12 +305,14 @@ preprocessing:
     - misc_val #drop it as it goes hand in hand with misc_feature
     - mo_sold #Maybe engineer as a feature later on.
     - lot_frontage #GO OVER!!
+    - ms_subclass # Before we did the string but now just delete it
 
   #fillna_groupby:  #MAYBE DROP all rows?
     #column: lot_frontage
     #groupby: neighborhood
     #method: mean
 
+  
   fillna:
     numerical_zero:
       - bsmtfin_sf_1
