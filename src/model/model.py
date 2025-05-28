@@ -14,11 +14,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.feature_selection import SelectKBest, f_regression
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
-from src.preprocess.preprocessing import preprocess_data
-from src.features.features import engineer_features
-from src.evaluation.evaluation import evaluate_regression
-from src.data_load.data_loader import load_config
-
+from preprocess.preprocessing import preprocess_data
+from features.features import engineer_features
+from evaluation.evaluation import evaluate_regression
+from data_load.data_loader import load_config
 
 
 logger = logging.getLogger(__name__)
@@ -38,8 +37,10 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         x_processed = preprocess_data(x_data)
         x_processed.columns = x_processed.columns.astype(str)
 
+        y_data = y_data.loc[x_processed.index]
+
 # move to config?
-        #config = load_config(config_path: str = "config.yaml")
+        # config = load_config(config_path: str = "config.yaml")
         important_manual_features = config["features"]["most_relevant_features"]
         config_engineer_features = config["features"]["engineered"]
         print("AAAAAAAAAAAAAAA")
@@ -67,11 +68,10 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         )].tolist()
 
         selected_features.extend(always_keep)
-        selected_features = list(set(selected_features)) # Make sure we dont have repeated features
+        # Make sure we dont have repeated features
+        selected_features = list(set(selected_features))
 
-        
         x_final = x_processed[selected_features]
-
 
         split_cfg = config["data_split"]
         x_train, x_test, y_train, y_test = train_test_split(
@@ -91,7 +91,6 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         logger.info("Model training completed.")
         y_pred = model.predict(x_test)
         metrics = evaluate_regression(y_test, y_pred)
-
 
         logger.info("Evaluation metrics: %s", metrics)
 

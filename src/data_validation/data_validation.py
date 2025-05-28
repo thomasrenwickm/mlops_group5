@@ -13,6 +13,7 @@ import yaml
 import json
 import logging
 from typing import Dict, Any
+import os
 
 # Load config
 with open("config.yaml", "r") as f:
@@ -20,11 +21,13 @@ with open("config.yaml", "r") as f:
 
 schema = config["data_validation"]["schema"]["columns"]
 action_on_error = config["data_validation"].get("action_on_error", "raise")
-report_path = config["data_validation"].get("report_path", "logs/validation_report.json")
+report_path = config["data_validation"].get(
+    "report_path", "logs/validation_report.json")
 
 # Setup logger
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 
 def validate_schema(df: pd.DataFrame, schema: list, action: str = "raise") -> Dict[str, Any]:
     """
@@ -72,18 +75,22 @@ def validate_schema(df: pd.DataFrame, schema: list, action: str = "raise") -> Di
         "errors": errors,
     }
 
+    os.makedirs(os.path.dirname(report_path), exist_ok=True)
     with open(report_path, "w") as f:
         json.dump(report, f, indent=2)
 
     if errors:
         if action == "raise":
-            raise ValueError(f"Data validation failed with {len(errors)} error(s). See report at {report_path}")
+            raise ValueError(
+                f"Data validation failed with {len(errors)} error(s). See report at {report_path}")
         elif action == "warn":
-            logger.warning(f"Validation completed with warnings. See report at {report_path}")
+            logger.warning(
+                f"Validation completed with warnings. See report at {report_path}")
     else:
         logger.info("Data validation passed with no errors.")
 
     return report
+
 
 if __name__ == "__main__":
     """
