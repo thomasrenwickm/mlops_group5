@@ -16,7 +16,7 @@ from typing import Dict
 import pandas as pd
 import yaml
 
-from src.features.features import engineer_features
+from features.features import engineer_features
 
 logger = logging.getLogger(__name__)
 
