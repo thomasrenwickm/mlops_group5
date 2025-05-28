@@ -19,7 +19,6 @@ from features.features import engineer_features
 from evaluation.evaluation import evaluate_regression
 from data_load.data_loader import load_config
 
-
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
@@ -39,23 +38,9 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
 
         y_data = y_data.loc[x_processed.index]
 
-# move to config?
-        # config = load_config(config_path: str = "config.yaml")
         important_manual_features = config["features"]["most_relevant_features"]
         config_engineer_features = config["features"]["engineered"]
-        print("AAAAAAAAAAAAAAA")
-        print(type(config_engineer_features))
-        all_selected_features = important_manual_features
-        all_selected_features.extend(config_engineer_features)
-        print("AAAAAAAAAAAAAAA")
-        print(all_selected_features)
-        print(type(all_selected_features))
-
-        '''important_manual_features = [
-            "total_sf", "bathrooms", "house_age", "since_remodel",
-            "overall_qual", "garage_cars", "gr_liv_area",
-            "kitchen_qual", "exter_qual", "neighborhood"
-        ]'''
+        all_selected_features = important_manual_features + config_engineer_features
 
         always_keep = [
             f for f in all_selected_features if f in x_processed.columns]
@@ -68,17 +53,21 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         )].tolist()
 
         selected_features.extend(always_keep)
-        # Make sure we dont have repeated features
         selected_features = list(set(selected_features))
 
         x_final = x_processed[selected_features]
 
         split_cfg = config["data_split"]
-        x_train, x_test, y_train, y_test = train_test_split(
-            x_final,
-            y_data,
-            test_size=split_cfg["test_size"],
-            random_state=split_cfg["random_state"]
+        test_size = split_cfg["test_size"]
+        valid_size = split_cfg["valid_size"]
+        random_state = split_cfg["random_state"]
+
+        x_train, x_temp, y_train, y_temp = train_test_split(
+            x_final, y_data, test_size=(test_size + valid_size), random_state=random_state
+        )
+        rel_valid = valid_size / (test_size + valid_size)
+        x_valid, x_test, y_valid, y_test = train_test_split(
+            x_temp, y_temp, test_size=rel_valid, random_state=random_state
         )
 
         model_type = config["model"]["active"]
@@ -89,14 +78,19 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
 
         model.fit(x_train, y_train)
         logger.info("Model training completed.")
-        y_pred = model.predict(x_test)
-        metrics = evaluate_regression(y_test, y_pred)
 
-        logger.info("Evaluation metrics: %s", metrics)
+        y_valid_pred = model.predict(x_valid)
+        valid_metrics = evaluate_regression(y_valid, y_valid_pred)
+        logger.info("Validation metrics: %s", valid_metrics)
+
+        y_test_pred = model.predict(x_test)
+        test_metrics = evaluate_regression(y_test, y_test_pred)
+        logger.info("Test metrics: %s", test_metrics)
 
         metrics_path = config["artifacts"]["metrics_path"]
         os.makedirs(os.path.dirname(metrics_path), exist_ok=True)
-        pd.Series(metrics).to_json(metrics_path, indent=2)
+        pd.DataFrame({"validation": valid_metrics, "test": test_metrics}).to_json(
+            metrics_path, indent=2)
         logger.info("Saved metrics to %s", metrics_path)
 
         model_path = config["model"].get("model_path", "models/model.pkl")
