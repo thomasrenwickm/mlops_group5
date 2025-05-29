@@ -123,3 +123,14 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     logger.info("Preprocessing completed.")
 
     return processed_df
+
+if __name__ == "__main__":
+    """
+    Entry point for testing preprocessing script manually.
+    Loads data using the configured path and runs preprocessing.
+    """
+    raw_path = config["data_source"]["raw_path"]
+    df = pd.read_csv(raw_path)
+    df_processed = preprocess_data(df)
+    print("Preprocessing completed. Processed shape:", df_processed.shape)
+    df_processed.head()
