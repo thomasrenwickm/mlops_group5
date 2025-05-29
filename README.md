@@ -116,3 +116,6 @@ pytest tests/ --cov=src
 ---
 
 For questions or contributions, feel free to open an issue or pull request!
+
+
+Collaborators: *Shadi Alfaraj, Yotaro Enomoto, Thomas Renwick, Massimo Tassinari, Joy Zhong*
