@@ -4,21 +4,18 @@ channels:
   - conda-forge  # Community channel with most up-to-date packages
 
 dependencies:
-  - python=3.10       # Stable and widely-used Python version for compatibility
-  - pandas            # Core library for data loading (CSV, Excel) and manipulation
-  - numpy             # Fundamental package for numerical computing
-  - openpyxl          # Excel support for pandas (read/write .xlsx files)
-  - pyyaml            # Read configuration from YAML files for flexibility
-  - python-dotenv     # Load environment variables from a .env file (for secrets/config)
-  - pytest            # Testing framework for robust, maintainable code
-  - pytest-dotenv     # Load environment variables from .env files in pytest
-  - scikit-learn      # Machine learning library for model training and evaluation
-  - joblib            # Model serialization (efficient for sklearn models)
-  - matplotlib        # Basic plotting for data visualization
-  - seaborn           # Statistical visualizations built on top of matplotlib
-  - pip               # Allows pip-only packages to be installed below
+  - python=3.10.17       # Stable and widely-used Python version for compatibility
+  - pandas=2.2.3            # Core library for data loading (CSV, Excel) and manipulation
+  - numpy=2.2.6             # Fundamental package for numerical computing
+  - openpyxl=3.1.5          # Excel support for pandas (read/write .xlsx files)
+  - pyyaml=6.0.2            # Read configuration from YAML files for flexibility
+  - python-dotenv=1.1.0     # Load environment variables from a .env file (for secrets/config)
+  - pytest=8.3.5            # Testing framework for robust, maintainable code
+  - pytest-dotenv=0.5.2     # Load environment variables from .env files in pytest
+  - scikit-learn=1.6.1      # Machine learning library for model training and evaluation
+  - pip=25.1.1                # Allows pip-only packages to be installed below
 
   - pip:
-      - pytest-cov  # Test coverage reporting for code quality and completeness
-      - black       # Code formatting to enforce style and readability
-      - flake8      # Linting to check code for errors and best practices
+      - pytest-cov==6.1.1  # Test coverage reporting for code quality and completeness
+      - black==25.1.0       # Code formatting to enforce style and readability
+      - flake8==7.2.0      # Linting to check code for errors and best practices
