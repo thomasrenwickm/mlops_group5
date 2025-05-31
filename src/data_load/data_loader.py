@@ -95,10 +95,7 @@ def get_data(
     )
 
 if __name__ == "__main__":
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-    )
+
     try:
         df = get_data(data_stage="raw")  # or "processed"
         print(df.head())

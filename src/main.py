@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import argparse
 import logging
 import os
@@ -10,9 +13,6 @@ from data_validation.data_validation import validate_schema
 from model.model import run_model_pipeline
 from inference.inference import run_inference
 
-
-# logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 
 def setup_logging(log_cfg):
@@ -73,6 +73,7 @@ def main():
         sys.exit(1)
 
     setup_logging(config.get("logging", {}))
+    logger = logging.getLogger(__name__)
     logger.info("Pipeline started | stage=%s", args.stage)
 
     try:

@@ -21,13 +21,6 @@ from features.features import engineer_features
 logger = logging.getLogger(__name__)
 
 
-def _setup_logging():
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-    )
-
-
 def _load_pickle(path: str, label: str):
     p = Path(path)
     if not p.is_file():
@@ -37,7 +30,6 @@ def _load_pickle(path: str, label: str):
 
 
 def run_inference(input_csv: str, config_yaml: str, output_csv: str) -> None:
-    _setup_logging()
 
     # Load config
     with open(config_yaml, "r", encoding="utf-8") as f:

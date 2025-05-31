@@ -12,7 +12,7 @@ data_source:
 
 logging:
   level: "INFO"                         # Logging level: DEBUG (verbose), INFO (default), WARNING, ERROR, CRITICAL
-  log_file: "./logs/main.log"          # File path for log output
+  log_file: "logs/main.log"          # File path for log output
   format: "%(asctime)s - %(levelname)s - %(name)s - %(message)s"  # Log message format
   datefmt: "%Y-%m-%d %H:%M:%S"          # Date format for logs
 

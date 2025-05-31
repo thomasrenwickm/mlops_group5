@@ -22,7 +22,6 @@ with open("config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
 
 
 def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:

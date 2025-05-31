@@ -20,8 +20,6 @@ from evaluation.evaluation import evaluate_regression
 from data_load.data_loader import load_config
 
 logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO)
-
 
 def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
     try:
