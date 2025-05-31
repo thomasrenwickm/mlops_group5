@@ -4,11 +4,11 @@ inference.py
 Load trained model and preprocessing pipeline to make predictions on new data.
 """
 
-import pandas as pd
 import pickle
 import logging
+from pathlib import Path
+import pandas as pd
 import yaml
-import os
 
 from preprocess.preprocessing import transform_with_pipeline
 from features.features import engineer_features
@@ -18,11 +18,21 @@ logger = logging.getLogger(__name__)
 
 
 def run_inference(input_csv: str, config_path: str, output_csv: str):
-    from pathlib import Path
+    """
+    Executes the inference stage of the pipeline to generate predictions
+    on new data based on pre-trained artifacts.
+
+    Why: This function enables consistent, repeatable, and configurable
+    deployment of a trained model. By externalizing inputs and outputs
+    through config files and handling all steps from loading to prediction
+    within one interface, we reduce the risk of human error and ensure
+    reproducibility of results in production, experimentation,
+    or batch use cases.
+    """
 
     # Load config
-    logger.info(f"Loading config from {config_path}")
-    with open(config_path, "r") as f:
+    logger.info("Loading config from %s", config_path)
+    with open(config_path, "r", encoding="utf-8") as f:
         config = yaml.safe_load(f)
 
     config["data_source"]["new_data_path"] = input_csv
@@ -47,15 +57,15 @@ def run_inference(input_csv: str, config_path: str, output_csv: str):
     selected_features = pd.read_json(features_path, typ="series").tolist()
 
     logger.info("Applying preprocessing pipeline")
-    X_all = transform_with_pipeline(new_data, config, pipeline)
-    X_processed = X_all[selected_features]
+    x_all = transform_with_pipeline(new_data, config, pipeline)
+    x_processed = x_all[selected_features]
 
     logger.info("Loading model from %s", model_path)
     with open(model_path, "rb") as f:
         model = pickle.load(f)
 
     logger.info("Running prediction")
-    predictions = model.predict(X_processed)
+    predictions = model.predict(x_processed)
 
     logger.info("Saving predictions to %s", output_csv)
     Path(output_csv).parent.mkdir(parents=True, exist_ok=True)

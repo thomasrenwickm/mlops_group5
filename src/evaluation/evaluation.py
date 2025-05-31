@@ -5,7 +5,12 @@ Module for computing regression evaluation metrics.
 Reusable across training, testing, or inference validation.
 """
 
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, root_mean_squared_error
+from sklearn.metrics import (
+    mean_squared_error,
+    mean_absolute_error,
+    r2_score,
+    root_mean_squared_error
+)
 
 
 def evaluate_regression(y_true, y_pred) -> dict:

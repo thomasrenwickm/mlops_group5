@@ -8,15 +8,15 @@ Validates the input raw dataset using the schema defined in config.yaml.
 - Logs all validation results to file
 """
 
-import pandas as pd
-import yaml
 import json
 import logging
 from typing import Dict, Any
 import os
+import pandas as pd
+import yaml
 
 # Load config
-with open("config.yaml", "r") as f:
+with open("config.yaml", "r", encoding="utf-8") as f:
     config = yaml.safe_load(f)
 
 schema = config["data_validation"]["schema"]["columns"]
@@ -28,7 +28,10 @@ report_path = config["data_validation"].get(
 logger = logging.getLogger(__name__)
 
 
-def validate_schema(df: pd.DataFrame, schema: list, action: str = "raise") -> Dict[str, Any]:
+def validate_schema(df: pd.DataFrame,
+                    schema: list,
+                    action: str = "raise"
+                    ) -> Dict[str, Any]:
     """
     Validate a DataFrame against a given schema.
 
@@ -55,16 +58,33 @@ def validate_schema(df: pd.DataFrame, schema: list, action: str = "raise") -> Di
 
         # Check data type
         actual_dtype = df[name].dtype
-        if expected_type == "int" and not pd.api.types.is_integer_dtype(actual_dtype):
-            msg = f"Column '{name}' expected int but found {actual_dtype}"
+        if (
+            expected_type == "int"
+            and not pd.api.types.is_integer_dtype(actual_dtype)
+        ):
+            msg = (
+                f"Column '{name}' expected int but found {actual_dtype}"
+            )
             errors.append(msg)
             logger.error(msg)
-        elif expected_type == "float" and not pd.api.types.is_float_dtype(actual_dtype):
-            msg = f"Column '{name}' expected float but found {actual_dtype}"
+
+        elif (
+            expected_type == "float"
+            and not pd.api.types.is_float_dtype(actual_dtype)
+        ):
+            msg = (
+                f"Column '{name}' expected float but found {actual_dtype}"
+            )
             errors.append(msg)
             logger.error(msg)
-        elif expected_type == "str" and not pd.api.types.is_string_dtype(actual_dtype):
-            msg = f"Column '{name}' expected str but found {actual_dtype}"
+
+        elif (
+            expected_type == "str"
+            and not pd.api.types.is_string_dtype(actual_dtype)
+        ):
+            msg = (
+                f"Column '{name}' expected str but found {actual_dtype}"
+            )
             errors.append(msg)
             logger.error(msg)
 
@@ -75,16 +95,22 @@ def validate_schema(df: pd.DataFrame, schema: list, action: str = "raise") -> Di
     }
 
     os.makedirs(os.path.dirname(report_path), exist_ok=True)
-    with open(report_path, "w") as f:
+    with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
 
     if errors:
         if action == "raise":
             raise ValueError(
-                f"Data validation failed with {len(errors)} error(s). See report at {report_path}")
+                f"Data validation failed with {len(errors)} error(s). "
+                f"See report at {report_path}"
+                )
+
         elif action == "warn":
             logger.warning(
-                f"Validation completed with warnings. See report at {report_path}")
+                "Validation completed with warnings. "
+                "See report at %s",
+                report_path)
+
     else:
         logger.info("Data validation passed with no errors.")
 
@@ -92,12 +118,9 @@ def validate_schema(df: pd.DataFrame, schema: list, action: str = "raise") -> Di
 
 
 if __name__ == "__main__":
-    """
-    Entry point to run data validation as a script.
-    Loads the raw data using config path and validates against schema.
-    """
     try:
         df = pd.read_csv(config["data_source"]["raw_path"])
         validate_schema(df, schema, action_on_error)
+        print('Data validation worked!')
     except Exception as e:
-        logger.exception(f"Data validation failed: {e}")
+        logger.exception("Data validation failed: %s", e)

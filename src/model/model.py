@@ -22,6 +22,17 @@ logger = logging.getLogger(__name__)
 
 
 def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
+    """
+    Builds and saves a machine learning pipeline with full traceability
+    and reproducibility from raw input to trained model artifacts.
+
+    Why: This function encapsulates the entire model training lifecycle
+    to ensure that every step — from preprocessing to evaluation — is
+    executed in a controlled and consistent way. It minimizes the risk of
+    manual errors, enables auditability through saved artifacts, and
+    simplifies future retraining or inference by ensuring alignment
+    between training-time and runtime components.
+    """
     try:
         logger.info("Starting model training pipeline...")
 
@@ -38,9 +49,13 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         y_data = y_data.loc[x_processed.index]
 
         # 3. Feature selection
-        important_manual_features = config["features"]["most_relevant_features"]
+        important_manual_features = config["features"][
+            "most_relevant_features"
+            ]
         config_engineer_features = config["features"].get("engineered", [])
-        all_selected_features = important_manual_features + config_engineer_features
+        all_selected_features = (
+            important_manual_features + config_engineer_features
+            )
 
         always_keep = [
             f for f in all_selected_features if f in x_processed.columns]
@@ -48,7 +63,8 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         selection_input = x_processed.drop(
             columns=always_keep, errors="ignore")
         selector = SelectKBest(score_func=f_regression, k=10)
-        x_selected = selector.fit_transform(selection_input, y_data)
+        # x_selected = selector.fit_transform(selection_input, y_data)
+        selector.fit_transform(selection_input, y_data)
         selected_features = selection_input.columns[selector.get_support(
         )].tolist()
         selected_features.extend(always_keep)
@@ -64,7 +80,10 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         random_state = split_cfg["random_state"]
 
         x_train, x_temp, y_train, y_temp = train_test_split(
-            x_final, y_data, test_size=(test_size + valid_size), random_state=random_state
+            x_final,
+            y_data,
+            test_size=(test_size + valid_size),
+            random_state=random_state
         )
         rel_valid = valid_size / (test_size + valid_size)
         x_valid, x_test, y_valid, y_test = train_test_split(
@@ -76,7 +95,7 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         if model_type == "linear_regression":
             model = LinearRegression()
         else:
-            raise ValueError("Unsupported model type: %s", model_type)
+            raise ValueError(f"Unsupported model type: {model_type}")
 
         model.fit(x_train, y_train)
         logger.info("Model training completed.")
@@ -93,7 +112,8 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         # 7. Save metrics
         metrics_path = config["artifacts"]["metrics_path"]
         os.makedirs(os.path.dirname(metrics_path), exist_ok=True)
-        pd.DataFrame({"validation": valid_metrics, "test": test_metrics}).to_json(
+        pd.DataFrame({"validation": valid_metrics,
+                      "test": test_metrics}).to_json(
             metrics_path, indent=2
         )
         logger.info("Saved metrics to %s", metrics_path)
