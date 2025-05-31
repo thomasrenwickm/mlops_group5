@@ -13,7 +13,7 @@ import os
 from preprocess.preprocessing import transform_with_pipeline
 from features.features import engineer_features
 
-logging.basicConfig(level=logging.INFO)
+
 logger = logging.getLogger(__name__)
 
 
