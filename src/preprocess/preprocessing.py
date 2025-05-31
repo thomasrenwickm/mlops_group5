@@ -10,22 +10,19 @@ Preprocess raw data using config-defined steps:
 """
 
 import pandas as pd
-import yaml
 import pickle
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
-from sklearn.compose import ColumnTransformer
 import logging
 import os
-
-# Load config
-with open("config.yaml", "r") as f:
-    config = yaml.safe_load(f)
+from sklearn.preprocessing import StandardScaler, OneHotEncoder, MinMaxScaler
+from sklearn.compose import ColumnTransformer
+from typing import Tuple
 
 logger = logging.getLogger(__name__)
 
 
-def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
-    logger.info("Starting preprocessing...")
+def clean_raw_data(df: pd.DataFrame, config: dict) -> pd.DataFrame:
+    """Basic preprocessing steps applied before pipeline fitting or transforming."""
+    logger.info("Starting raw data cleaning...")
 
     # 1. Rename columns
     renaming = config["preprocessing"].get("rename_columns", {})
@@ -39,24 +36,32 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
 
     # 3. Handle missing values
     fillna_cfg = config["preprocessing"].get("fillna", {})
-
     for col in fillna_cfg.get("numerical_zero", []):
-        df[col] = df[col].fillna(0)
+        if col in df.columns:
+            df[col] = df[col].fillna(0)
     for col in fillna_cfg.get("categorical_none", []):
-        df[col] = df[col].fillna("None")
+        if col in df.columns:
+            df[col] = df[col].fillna("None")
 
     group_cfg = config["preprocessing"].get("fillna_groupby", {})
     if group_cfg:
         col = group_cfg["column"]
         grp = group_cfg["groupby"]
-        df[col] = df.groupby(grp)[col].transform(lambda x: x.fillna(x.mean()))
+        if col in df.columns and grp in df.columns:
+            df[col] = df.groupby(grp)[col].transform(
+                lambda x: x.fillna(x.mean()))
 
     # 4. Drop rows with NA in critical columns
     dropna = config["preprocessing"].get("dropna_rows", [])
-    df.dropna(subset=dropna, inplace=True)
+    df.dropna(
+        subset=[col for col in dropna if col in df.columns], inplace=True)
     logger.info(f"Dropped rows with missing values in: {dropna}")
 
-    # 5. Define transformers
+    return df
+
+
+def build_preprocessing_pipeline(config: dict, df: pd.DataFrame) -> Tuple[ColumnTransformer, list]:
+    """Construct the ColumnTransformer using the config."""
     features = config["features"]
     categorical = [col for col in features.get(
         "categorical", []) if col in df.columns]
@@ -79,13 +84,7 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
     scale_cfg = config["preprocessing"].get("scaling", {})
     if scale_cfg:
         scale_type = scale_cfg.get("method", "standard")
-        if scale_type == "standard":
-            scaler = StandardScaler()
-        elif scale_type == "minmax":
-            from sklearn.preprocessing import MinMaxScaler
-            scaler = MinMaxScaler()
-        else:
-            raise ValueError(f"Unknown scaler: {scale_type}")
+        scaler = StandardScaler() if scale_type == "standard" else MinMaxScaler()
         numeric_cols = []
         if "continuous" in scale_cfg.get("apply_to", []):
             numeric_cols += continuous
@@ -93,32 +92,48 @@ def preprocess_data(df: pd.DataFrame) -> pd.DataFrame:
             numeric_cols += ordinal
         transformers.append(("scaler", scaler, numeric_cols))
 
-    # Column transformer
     preprocessor = ColumnTransformer(
-        transformers=transformers,
-        remainder='drop'
-    )
+        transformers=transformers, remainder="drop")
+    selected_features = categorical + ordinal + continuous
+    return preprocessor, selected_features
 
-    logger.info("Fitting transformers...")
-    df_transformed = preprocessor.fit_transform(df)
 
-    # Save pipeline
-    pipeline_path = config["artifacts"].get(
-        "preprocessing_pipeline", "models/preprocessing_pipeline.pkl")
+def fit_and_save_pipeline(df: pd.DataFrame, config: dict) -> pd.DataFrame:
+    """Fit the preprocessing pipeline and save it to disk."""
+    df_clean = clean_raw_data(df.copy(), config)
+    pipeline, selected_features = build_preprocessing_pipeline(
+        config, df_clean)
+
+    logger.info("Fitting preprocessing pipeline...")
+    df_transformed = pipeline.fit_transform(df_clean)
+
+    pipeline_path = config["artifacts"]["preprocessing_pipeline"]
     os.makedirs(os.path.dirname(pipeline_path), exist_ok=True)
     with open(pipeline_path, "wb") as f:
-        pickle.dump(preprocessor, f)
+        pickle.dump(pipeline, f)
     logger.info(f"Saved preprocessing pipeline to {pipeline_path}")
 
-    # Get feature names
+    # Save selected features
+    features_path = config["artifacts"]["selected_features"]
+    pd.Series(selected_features).to_json(features_path)
+    logger.info(f"Saved selected features to {features_path}")
+
     try:
-        feature_names = preprocessor.get_feature_names_out()
+        feature_names = pipeline.get_feature_names_out()
     except AttributeError:
         feature_names = [f"f{i}" for i in range(df_transformed.shape[1])]
 
-    processed_df = pd.DataFrame(df_transformed, columns=feature_names)
-    processed_df.columns = processed_df.columns.astype(str)
+    return pd.DataFrame(df_transformed, columns=feature_names)
 
-    logger.info("Preprocessing completed.")
 
-    return processed_df
+def transform_with_pipeline(df: pd.DataFrame, config: dict, pipeline: ColumnTransformer) -> pd.DataFrame:
+    """Apply a previously fitted preprocessing pipeline."""
+    df_clean = clean_raw_data(df.copy(), config)
+    df_transformed = pipeline.transform(df_clean)
+
+    try:
+        feature_names = pipeline.get_feature_names_out()
+    except AttributeError:
+        feature_names = [f"f{i}" for i in range(df_transformed.shape[1])]
+
+    return pd.DataFrame(df_transformed, columns=feature_names)
