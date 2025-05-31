@@ -1,66 +1,21 @@
-# mlops_group5
-
-project_name/
-├── README.md
-├── config.yaml
-├── environment.yml
-├── .env
-├── .gitignore
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── splits/
-├── logs/
-│   └── main_log.log
-├── notebooks/
-│   └── initial_analysis.ipynb
-├── src/
-│   ├── __init__.py
-│   ├── main.py
-│   ├── data/
-│   │   ├── __init__.py
-│   │   ├── data_loader.py
-│   │   └── data_validation.py
-│   ├── features/
-│   │   ├── __init__.py
-│   │   └── features.py
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── model.py
-│   │   ├── evaluation.py
-│   │   └── inference.py
-│   └── preprocessing/
-│       ├── __init__.py
-│       └── preprocessing.py
-├── tests/
-│   ├── __init__.py
-│   ├── test_data_loader.py
-│   ├── test_data_validation.py
-│   ├── test_preprocessing.py
-│   ├── test_features.py
-│   ├── test_model.py
-│   ├── test_evaluation.py
-│   └── test_inference.py
-
-# README.md
+# MLOps Pipeline for Housing Sale Price Predictions
 
 ## 📌 Project Overview
 This project implements a complete MLOps pipeline, transforming a Jupyter notebook into a modular, testable, and reproducible machine learning system. It follows best practices in software engineering, DevOps, and data science to ensure robust and maintainable solutions.
 
 ## 📁 Project Structure
 ```
-project_name/
-├── data/              # Raw, processed, and split data
-├── notebooks/         # Exploratory notebooks
-├── src/               # Source code for data, features, models
-├── tests/             # Unit tests for all modules
-├── configs/           # YAML config files
-├── logs/              # Log files
-├── environment.yml    # Conda environment definition
-├── config.yaml        # Project configuration file
-├── .env               # Environment variables for secrets
-├── .gitignore         # Git exclusions
-└── README.md          # Project documentation
+├── data/ # Raw, processed, and split data
+├── notebooks/ # Exploratory notebooks
+├── src/ # Source code for data, features, models
+├── tests/ # Unit tests for all modules
+├── logs/ # Log files
+├── models/ # Serialized models and preprocessing pipelines
+├── environment.yml # Conda environment definition
+├── config.yaml # Project configuration file
+├── .env # Environment variables for secrets
+├── .gitignore # Git exclusions
+└── README.md # Project documentation
 ```
 
 ## ⚙️ Setup Instructions
@@ -72,7 +27,7 @@ cd <repo_name>
 2. Create conda environment:
 ```bash
 conda env create -f environment.yml
-conda activate mlops_project
+conda activate mlops_group5_env
 ```
 3. Run the pipeline:
 ```bash
