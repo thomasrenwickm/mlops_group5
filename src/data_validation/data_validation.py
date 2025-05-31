@@ -24,8 +24,7 @@ action_on_error = config["data_validation"].get("action_on_error", "raise")
 report_path = config["data_validation"].get(
     "report_path", "logs/validation_report.json")
 
-# Setup logger
-logging.basicConfig(level=logging.INFO)
+
 logger = logging.getLogger(__name__)
 
 
