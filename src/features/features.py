@@ -22,6 +22,6 @@ def engineer_features(df: pd.DataFrame, config: dict) -> pd.DataFrame:
     df["since_remodel"] = df["Yr Sold"] - df["Year Remod/Add"]
 
     # Treat MS SubClass as a categorical string
-    #df["MS SubClass"] = df["MS SubClass"].astype(str)
+    # df["MS SubClass"] = df["MS SubClass"].astype(str)
 
     return df
