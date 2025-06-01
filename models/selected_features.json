@@ -1,1 +1,1 @@
-{"0":"scaler__total_bsmt_sf","1":"scaler__overall_qual","2":"scaler__garage_area","3":"onehot__foundation_PConc","4":"scaler__garage_cars","5":"scaler__year_built","6":"scaler__gr_liv_area","7":"onehot__exter_qual_TA","8":"scaler__1st_flr_sf","9":"scaler__year_remod_add"}
+{"0":"scaler__1st_flr_sf","1":"scaler__garage_area","2":"scaler__year_built","3":"scaler__gr_liv_area","4":"scaler__year_remod_add","5":"onehot__exter_qual_TA","6":"scaler__overall_qual","7":"scaler__garage_cars","8":"scaler__total_bsmt_sf","9":"onehot__foundation_PConc"}
