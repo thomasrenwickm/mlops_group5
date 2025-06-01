@@ -2,8 +2,16 @@ import pytest
 from unittest import mock
 import sys
 
+import sys
+import os
+
+# Add project root to path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
+
+from src import main
 # We'll import main.py as a module
-import main
+
 
 @mock.patch("main.run_inference")
 @mock.patch("main.run_model_pipeline")
