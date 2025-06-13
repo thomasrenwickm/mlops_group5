@@ -14,6 +14,9 @@ dependencies:
   - pytest-dotenv=0.5.2     # Load environment variables from .env files in pytest
   - scikit-learn=1.6.1      # Machine learning library for model training and evaluation
   - pip=25.1.1                # Allows pip-only packages to be installed below
+  - awscli
+  - dvc
+  - dvc-s3
 
   - pip:
       - pytest-cov==6.1.1  # Test coverage reporting for code quality and completeness
