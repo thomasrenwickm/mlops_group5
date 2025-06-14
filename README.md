@@ -112,3 +112,9 @@ This project was completed by:
 
 For contributions, please open a pull request.
 For feedback or questions, contact any team member or open an issue.
+
+## Changelog
+
+### v0.1.0-notebook-to-mlops-project
+- Functional pipeline before integrating MLflow Projects, Hydra, and W&B
+- For reference or rollback, check [this release/tag](https://github.com/thomasrenwickm/mlops_group5/releases/tag/v0.1.0-notebook-to-mlops-project)
