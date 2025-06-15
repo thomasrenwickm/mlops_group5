@@ -1,0 +1,14 @@
+name: mlflow_orch
+
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10.17
+  - hydra-core
+  - omegaconf
+  - python-dotenv
+  - pyyaml
+  - pip
+  - pip:
+      - mlflow-skinny
+      - wandb
