@@ -19,16 +19,17 @@ pip-wheel-metadata/
 .env
 .env.*
 *.env
+!/.env.example
 
 # Logs
 logs/
 *.log
 
-
 # Test, split, and processed data (if/when added)
 dataset/processed/
 dataset/splits/
 dataset/raw/
+*.csv
 
 # OS files
 .DS_Store
@@ -43,3 +44,11 @@ Thumbs.db
 .vscode/
 .idea/
 /data
+
+# Mlflow and WandB tracking files
+mlruns/
+wandb/
+
+
+# Hydra config files
+outputs/
