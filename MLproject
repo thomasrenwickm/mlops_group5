@@ -20,17 +20,19 @@ entry_points:
           (e.g., "data_load,data_validation")
     command: >
       python main.py main.steps={steps}
+      
 
   # Optional second entry-point ─ only call this when you have
   # a non-empty hydra_options string; otherwise keep using `main`.
-  main_with_override:
-    parameters:
-      steps:
-        type: str
-        default: all
-      hydra_options:
-        type: str
-        default: ""
-        description: Extra overrides in standard Hydra syntax
-    command: >
-      python main.py main.steps={steps} {hydra_options}
+  #main_with_override:
+  #  parameters:
+  #    steps:
+  #      type: str
+  #      default: all
+  #    hydra_options:
+  #      type: str
+  #      default: ""
+  #      description: Extra overrides in standard Hydra syntax
+  #  command: >
+  #    python main.py main.steps={steps} {hydra_options}
+

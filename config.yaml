@@ -620,3 +620,10 @@ data_validation:
     - name: "Heating QC"
       dtype: str
       required: true
+
+data_load:
+  data_stage: "raw"
+  output_dir: "artifacts"
+  log_artifacts: true
+  log_summary_stats: true
+  log_sample_artifacts: true

@@ -1,0 +1,15 @@
+# src/data_load/MLproject
+name: data_load
+conda_env: conda.yml
+
+entry_points:
+  main:
+    parameters:
+      hydra_options:
+        type: str
+        default: ""          # leave empty by default
+        description: Extra Hydra overrides (optional)
+
+    # The $(echo …) pattern swallows the token when hydra_options == ""
+    command: >
+      python run.py
