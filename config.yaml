@@ -8,14 +8,14 @@ main:
 
 
 data_source:
-  raw_path: "./dataset/raw/AMES_Housing_Data.csv"  # Relative or absolute path to data file
-  processed_path: "./dataset/processed/AMES_Housing_processed_data.csv"  # Path to save processed data
+  raw_path: "./data/raw/AMES_Housing_Data.csv"  # Relative or absolute path to data file
+  processed_path: "./data/processed/AMES_Housing_processed_data.csv"  # Path to save processed data
   type: "csv"                      # Data file type: 'csv' or 'excel'
   sheet_name: "Sheet1"             # Only used if type == 'excel'
   delimiter: ","                   # Only used if type == 'csv'
   header: 0                        # Row number to use as column names (0-indexed), update if needed
   encoding: "utf-8"                # File encoding (utf-8 covers most cases)
-  new_data_path: "./data/new_data.csv"
+  new_data_path: "./data/inference/new_data.csv"
 
 
 logging:
@@ -364,8 +364,8 @@ preprocessing:
 artifacts:
   metrics_path: models/metrics.json
   preprocessing_pipeline: models/preprocessing_pipeline.pkl
-  splits_dir: dataset/splits
-  processed_dir: dataset/processed
+  splits_dir: data/splits
+  processed_dir: data/processed
   selected_features: models/selected_features.json
   model: models/model.pkl
 
