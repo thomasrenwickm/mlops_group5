@@ -1,0 +1,16 @@
+name: data_load
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.10.17
+  - pandas
+  - hydra-core
+  - omegaconf
+  - python-dotenv
+  - pyyaml
+  - openpyxl
+  - pip
+  - pip:
+      - wandb
