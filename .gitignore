@@ -26,10 +26,10 @@ logs/
 *.log
 
 # Test, split, and processed data (if/when added)
-dataset/processed/
-dataset/splits/
-dataset/raw/
-*.csv
+#dataset/processed/
+#dataset/splits/
+#dataset/raw/
+#*.csv
 
 # OS files
 .DS_Store
@@ -43,7 +43,7 @@ Thumbs.db
 # VSCode and other IDE config
 .vscode/
 .idea/
-/data
+#/data
 
 # Mlflow and WandB tracking files
 mlruns/
