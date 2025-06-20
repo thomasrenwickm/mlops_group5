@@ -12,5 +12,8 @@ dependencies:
   - pyyaml
   - openpyxl
   - pip
+  - dvc                  
+  - dvc-s3               
+  - awscli               
   - pip:
       - wandb
