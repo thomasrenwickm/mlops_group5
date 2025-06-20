@@ -8,7 +8,7 @@ main:
 
 
 data_source:
-  raw_path: "./dataset/raw/AMES_Housing_Data.csv"  # Relative or absolute path to data file
+  raw_path: "raw_path: ${oc.env:RAW_DATA_PATH}"  # Relative or absolute path to data file
   processed_path: "./dataset/processed/AMES_Housing_processed_data.csv"  # Path to save processed data
   type: "csv"                      # Data file type: 'csv' or 'excel'
   sheet_name: "Sheet1"             # Only used if type == 'excel'
