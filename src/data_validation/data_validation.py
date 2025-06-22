@@ -14,9 +14,13 @@ from typing import Dict, Any
 import os
 import pandas as pd
 import yaml
+from pathlib import Path
 
 # Load config
-with open("config.yaml", "r", encoding="utf-8") as f:
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+CONFIG_PATH = PROJECT_ROOT / "config.yaml"
+
+with open(CONFIG_PATH, "r", encoding="utf-8") as f:
     config = yaml.safe_load(f)
 
 schema = config["data_validation"]["schema"]["columns"]

@@ -24,7 +24,7 @@ SRC_ROOT = PROJECT_ROOT / "src"
 if str(SRC_ROOT) not in sys.path:
     sys.path.insert(0, str(SRC_ROOT))
 
-from data_validation.data_validation import validate_schema
+from data_validation.data_validation import validate_schema, schema, action_on_error
 
 load_dotenv() 
 
@@ -118,7 +118,7 @@ def main(cfg: DictConfig) -> None:
         config_dict.setdefault("data_validation", {})[
             "report_path"] = str(val_report_full)
 
-        validate_schema(df, config=config_dict)
+        validate_schema(df, schema=schema, action=action_on_error)
 
         # Save validated data to a temporary CSV and log to W&B
         with tempfile.TemporaryDirectory() as tmp_dir:
