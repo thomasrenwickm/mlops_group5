@@ -25,7 +25,6 @@ logger = logging.getLogger(__name__)
 # defined in config can be resolved relative to the repository.
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 
-from pathlib import Path
 
 def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
     """
@@ -107,23 +106,24 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         logger.info("Test metrics: %s", test_metrics)
 
         # 7. Save metrics
-        metrics_path = config["artifacts"]["metrics_path"]
-        os.makedirs(os.path.dirname(metrics_path), exist_ok=True)
+        metrics_path = PROJECT_ROOT / config.get("artifacts", {}).get("metrics_path", "models/metrics.json")
+        metrics_path.parent.mkdir(parents=True, exist_ok=True)
         pd.DataFrame({"validation": valid_metrics, "test": test_metrics}).to_json(metrics_path, indent=2)
         logger.info("Saved metrics to %s", metrics_path)
 
         # 8. Save model
-        model_path = config["artifacts"]["model"]
-        os.makedirs(os.path.dirname(model_path), exist_ok=True)
+        model_path = PROJECT_ROOT / config.get("artifacts", {}).get("model", "models/model.pkl")
+        model_path.parent.mkdir(parents=True, exist_ok=True)
         with open(model_path, "wb") as f:
             pickle.dump(model, f)
         logger.info("Saved model to %s", model_path)
 
         # 9. Save selected features
-        features_path = config["artifacts"]["selected_features"]
-        os.makedirs(os.path.dirname(features_path), exist_ok=True)
+        features_path = PROJECT_ROOT / config.get("artifacts", {}).get("selected_features", "models/selected_features.json")
+        features_path.parent.mkdir(parents=True, exist_ok=True)
         pd.Series(selected_features).to_json(features_path)
         logger.info("Saved selected features to %s", features_path)
+
 
     except Exception as e:
         logger.exception("Model training pipeline failed: %s", e)
