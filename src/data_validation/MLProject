@@ -1,0 +1,9 @@
+name: data_validation
+
+conda_env: conda.yml
+
+entry_points:
+  main:
+    parameters: {}
+    command: >
+      python run.py

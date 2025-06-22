@@ -1,0 +1,12 @@
+name: data_validation
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pandas
+  - pyyaml
+  - hydra-core
+  - omegaconf
+  - python-dotenv
+  - pip:
+      - wandb
