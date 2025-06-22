@@ -17,8 +17,8 @@ from dotenv import load_dotenv
 from pathlib import Path
 import subprocess
 
-print("🔁 Pulling DVC data...")
-subprocess.run(["dvc", "pull"], check=True)
+#print("🔁 Pulling DVC data...")
+#subprocess.run(["dvc", "pull"], check=True)
 
 # Load environment variables once at the top
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
