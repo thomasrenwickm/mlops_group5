@@ -106,6 +106,33 @@ def build_preprocessing_pipeline(config: dict,
     return preprocessor, selected_features
 
 
+
+def get_output_feature_names(pipeline: ColumnTransformer, input_features: list[str], config: dict) -> list[str]:
+    feature_names: list[str] = []
+    for name, transformer, cols in pipeline.transformers_:
+        if transformer == "drop":
+            continue
+        if hasattr(transformer, "get_feature_names_out"):
+            try:
+                feature_names.extend(transformer.get_feature_names_out(cols))
+                continue
+            except Exception:
+                pass
+        if hasattr(transformer, "named_steps"):
+            last_step = list(transformer.named_steps.values())[-1]
+            if hasattr(last_step, "get_feature_names_out"):
+                try:
+                    feature_names.extend(last_step.get_feature_names_out(cols))
+                    continue
+                except Exception:
+                    pass
+        if transformer == "passthrough":
+            feature_names.extend(cols)
+        else:
+            feature_names.extend(cols)
+    return feature_names
+
+
 def fit_and_save_pipeline(df: pd.DataFrame, config: dict) -> pd.DataFrame:
     """Fit the preprocessing pipeline and save it to disk."""
     df_clean = clean_raw_data(df.copy(), config)
