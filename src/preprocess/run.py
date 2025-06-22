@@ -162,14 +162,14 @@ def main(cfg: DictConfig) -> None:
             df_proc,
             test_size=(test_size + valid_size),
             random_state=rand_state,
-            stratify=df_proc[cfg.target],
+            #stratify=df_proc[cfg.target],
         )
         rel_valid = valid_size / (test_size + valid_size)
         valid_df, test_df = train_test_split(
             temp_df,
             test_size=rel_valid,
             random_state=rand_state,
-            stratify=temp_df[cfg.target],
+            #stratify=temp_df[cfg.target],
         )
         train_df.to_csv(processed_dir / "train_processed.csv", index=False)
         valid_df.to_csv(processed_dir / "valid_processed.csv", index=False)

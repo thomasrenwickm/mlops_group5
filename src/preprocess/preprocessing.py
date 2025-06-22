@@ -158,14 +158,7 @@ def fit_and_save_pipeline(df: pd.DataFrame, config: dict) -> pd.DataFrame:
     except AttributeError:
         feature_names = [f"f{i}" for i in range(df_transformed.shape[1])]
 
-    df_preprocessed = pd.DataFrame(df_transformed, columns=feature_names)
-
-    processed_path = config["preprocessing"].get("processed_path", "data/processed/preprocessed.csv")
-    os.makedirs(os.path.dirname(processed_path), exist_ok=True)
-    df_preprocessed.to_csv(processed_path, index=False)
-    logger.info("Saved preprocessed data to %s", processed_path)
-
-    return df_preprocessed
+    return pd.DataFrame(df_transformed, columns=feature_names)
 
 
 def transform_with_pipeline(df: pd.DataFrame,
