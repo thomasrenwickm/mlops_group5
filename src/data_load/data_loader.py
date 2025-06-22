@@ -6,7 +6,7 @@ Modular data ingestion utility for Ames Housing dataset.
 - Loads secrets from .env (if any)
 - Supports robust error handling and logging
 """
-
+from pathlib import Path
 import os
 import logging
 from typing import Optional
@@ -65,21 +65,44 @@ def load_data(
     consistent behavior across file types, and easier debugging during
     development and deployment.
     """
+    print('AAAAAAA')
+    print(path)
     if not path or not isinstance(path, str):
         logger.error("No valid data path specified.")
         raise ValueError("Invalid path provided.")
-    if not os.path.isfile(path):
-        logger.error("File not found: %s", path)
-        raise FileNotFoundError(f"Data file not found: {path}")
+    #if not os.path.isfile(path):
+    #    logger.error("File not found: %s", path)
+    #    raise FileNotFoundError(f"Data file not found: {path}")
+    
+
+    # Convert to Path and resolve relative to project root if needed
+    raw_path = Path(path)
+    if not raw_path.is_absolute():
+        # Assume root is 2 levels up from src/data_loader.py
+        project_root = Path(__file__).resolve().parents[2]
+        raw_path = project_root / raw_path
+
+    if not raw_path.exists():
+        logger.error("File not found: %s", raw_path)
+        raise FileNotFoundError(f"Data file not found: {raw_path}")
+
+    #
     try:
         if file_type == "csv":
+            #df = pd.read_csv(
+            #    path, delimiter=delimiter, header=header, encoding=encoding
+            #)
             df = pd.read_csv(
-                path, delimiter=delimiter, header=header, encoding=encoding
-            )
+    raw_path, delimiter=delimiter, header=header, encoding=encoding
+)
+
         elif file_type == "excel":
+            #df = pd.read_excel(
+            #    path, sheet_name=sheet_name, header=header, engine="openpyxl"
+            #)
             df = pd.read_excel(
-                path, sheet_name=sheet_name, header=header, engine="openpyxl"
-            )
+    raw_path, sheet_name=sheet_name, header=header, engine="openpyxl"
+)
             if isinstance(df, dict):
                 raise ValueError(
                     "Multiple sheets detected. "
@@ -87,7 +110,9 @@ def load_data(
                 )
         else:
             raise ValueError(f"Unsupported file type: {file_type}")
-        logger.info("Loaded data from %s, shape=%s", path, df.shape)
+        #logger.info("Loaded data from %s, shape=%s", path, df.shape)
+        logger.info("Loaded data from %s, shape=%s", raw_path, df.shape)
+
         return df
     except Exception:
         logger.exception("Data loading failed.")
@@ -120,7 +145,8 @@ def get_data(
     else:
         logger.error("Unknown data_stage: %s", data_stage)
         raise ValueError(f"Unknown data_stage: {data_stage}")
-
+    ###
+    
     if not path or not isinstance(path, str):
         logger.error("No valid path for data_stage='%s'", data_stage)
         raise ValueError(f"Missing path for data_stage='{data_stage}'")
@@ -139,6 +165,10 @@ def get_data(
 if __name__ == "__main__":
 
     try:
+        
+        print("🔍 Current working directory:", os.getcwd())
+        print("📂 Files in CWD:", os.listdir("."))
+
         df = get_data(data_stage="raw")  # or "processed"
         print(df.head())
         logger.info("Data loaded successfully. Shape: %s", df.shape)

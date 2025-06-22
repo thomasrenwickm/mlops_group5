@@ -13,3 +13,5 @@ entry_points:
     # The $(echo …) pattern swallows the token when hydra_options == ""
     command: >
       python run.py
+
+
