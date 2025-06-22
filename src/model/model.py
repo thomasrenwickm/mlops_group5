@@ -17,21 +17,20 @@ from preprocess.preprocessing import (
     fit_and_save_pipeline,
 )
 from evaluation.evaluation import evaluate_regression
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+# Resolve project root two levels above this file so that artifact paths
+# defined in config can be resolved relative to the repository.
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+from pathlib import Path
 
 def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
     """
     Builds and saves a machine learning pipeline with full traceability
     and reproducibility from raw input to trained model artifacts.
-
-    Why: This function encapsulates the entire model training lifecycle
-    to ensure that every step — from preprocessing to evaluation — is
-    executed in a controlled and consistent way. It minimizes the risk of
-    manual errors, enables auditability through saved artifacts, and
-    simplifies future retraining or inference by ensuring alignment
-    between training-time and runtime components.
     """
     try:
         logger.info("Starting model training pipeline...")
@@ -49,24 +48,15 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         y_data = y_data.loc[x_processed.index]
 
         # 3. Feature selection
-        important_manual_features = config["features"][
-            "most_relevant_features"
-            ]
+        important_manual_features = config["features"]["most_relevant_features"]
         config_engineer_features = config["features"].get("engineered", [])
-        all_selected_features = (
-            important_manual_features + config_engineer_features
-            )
+        all_selected_features = important_manual_features + config_engineer_features
 
-        always_keep = [
-            f for f in all_selected_features if f in x_processed.columns]
-
-        selection_input = x_processed.drop(
-            columns=always_keep, errors="ignore")
+        always_keep = [f for f in all_selected_features if f in x_processed.columns]
+        selection_input = x_processed.drop(columns=always_keep, errors="ignore")
         selector = SelectKBest(score_func=f_regression, k=10)
-        # x_selected = selector.fit_transform(selection_input, y_data)
         selector.fit_transform(selection_input, y_data)
-        selected_features = selection_input.columns[selector.get_support(
-        )].tolist()
+        selected_features = selection_input.columns[selector.get_support()].tolist()
         selected_features.extend(always_keep)
         selected_features = list(set(selected_features))
 
@@ -80,8 +70,7 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         random_state = split_cfg["random_state"]
 
         x_train, x_temp, y_train, y_temp = train_test_split(
-            x_final,
-            y_data,
+            x_final, y_data,
             test_size=(test_size + valid_size),
             random_state=random_state
         )
@@ -89,6 +78,14 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         x_valid, x_test, y_valid, y_test = train_test_split(
             x_temp, y_temp, test_size=rel_valid, random_state=random_state
         )
+
+        # Save raw data splits
+        splits_dir = PROJECT_ROOT / config.get("artifacts", {}).get("splits_dir", "data/splits")
+        splits_dir.mkdir(parents=True, exist_ok=True)
+        x_train.assign(**{target: y_train}).to_csv(splits_dir / "train.csv", index=False)
+        x_valid.assign(**{target: y_valid}).to_csv(splits_dir / "valid.csv", index=False)
+        x_test.assign(**{target: y_test}).to_csv(splits_dir / "test.csv", index=False)
+        logger.info("Saved raw train/valid/test splits to %s", splits_dir)
 
         # 5. Model training
         model_type = config["model"]["active"]
@@ -112,10 +109,7 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         # 7. Save metrics
         metrics_path = config["artifacts"]["metrics_path"]
         os.makedirs(os.path.dirname(metrics_path), exist_ok=True)
-        pd.DataFrame({"validation": valid_metrics,
-                      "test": test_metrics}).to_json(
-            metrics_path, indent=2
-        )
+        pd.DataFrame({"validation": valid_metrics, "test": test_metrics}).to_json(metrics_path, indent=2)
         logger.info("Saved metrics to %s", metrics_path)
 
         # 8. Save model
@@ -134,3 +128,4 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
     except Exception as e:
         logger.exception("Model training pipeline failed: %s", e)
         raise
+
