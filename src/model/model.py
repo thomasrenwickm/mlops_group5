@@ -106,6 +106,13 @@ def run_model_pipeline(df_raw: pd.DataFrame, config: dict) -> None:
         test_metrics = evaluate_regression(y_test, y_test_pred)
         logger.info("Test metrics: %s", test_metrics)
 
+        # Save y_true and y_pred to artifacts for evaluation step
+        artifacts_dir = PROJECT_ROOT / "artifacts"
+        artifacts_dir.mkdir(parents=True, exist_ok=True)
+        pd.Series(y_test, name="y_true").to_csv(artifacts_dir / "y_true.csv", index=False)
+        pd.Series(y_test_pred, name="y_pred").to_csv(artifacts_dir / "y_pred.csv", index=False)
+
+
         # 7. Save metrics
         metrics_path = config["artifacts"]["metrics_path"]
         os.makedirs(os.path.dirname(metrics_path), exist_ok=True)
