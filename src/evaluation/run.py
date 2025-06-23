@@ -23,12 +23,12 @@ from omegaconf import DictConfig, OmegaConf
 import pandas as pd
 
 # Simulated true values and predictions
-y_true = pd.Series([200000, 180000, 250000], name="SalePrice")
-y_pred = pd.Series([210000, 175000, 260000], name="PredictedSalePrice")
+#y_true = pd.Series([200000, 180000, 250000], name="SalePrice")
+#y_pred = pd.Series([210000, 175000, 260000], name="PredictedSalePrice")
 
 # Save them inside the artifacts directory
-y_true.to_csv("artifacts/y_true.csv", index=False)
-y_pred.to_csv("artifacts/y_pred.csv", index=False)
+#y_true.to_csv("artifacts/y_true.csv", index=False)
+#y_pred.to_csv("artifacts/y_pred.csv", index=False)
 
 
 ###
