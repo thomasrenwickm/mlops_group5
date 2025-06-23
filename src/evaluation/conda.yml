@@ -1,16 +1,11 @@
-name: evaluation
+name: evaluation_env
 channels:
-  - conda-forge
-
+  - defaults
 dependencies:
   - python=3.10
-  - pandas
-  - scikit-learn
-  - matplotlib
-  - hydra-core
-  - omegaconf
-  - python-dotenv
-  - pyyaml
   - pip
   - pip:
+      - mlflow
       - wandb
+      - hydra-core
+      - python-dotenv

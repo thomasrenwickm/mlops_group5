@@ -6,6 +6,11 @@ main:
   steps: all            # e.g., "data_load,data_validation,model,evaluation,inference"
   hydra_options: ""     # Add this line for CLI/MLflow runtime overrides
 
+inference:
+  input_csv: data/inference/new_data.csv
+
+
+  output_csv: artifacts/inference_output.csv
 
 data_source:
   raw_path: "data/raw/AMES_Housing_Data.csv"  # Relative or absolute path to data file
@@ -16,6 +21,9 @@ data_source:
   header: 0                        # Row number to use as column names (0-indexed), update if needed
   encoding: "utf-8"                # File encoding (utf-8 covers most cases)
   new_data_path: "./data/inference/new_data.csv"
+
+evaluate:
+  model_name: model.pkl
 
 
 logging:
@@ -31,6 +39,7 @@ data_split:
 
 model:
   active: linear_regression
+  path: "models/model.pkl"
 
 
 raw_features:
@@ -368,6 +377,7 @@ artifacts:
   processed_dir: data/processed
   selected_features: models/selected_features.json
   model: models/model.pkl
+  models: models
 
 
 #go over perhaps
@@ -627,3 +637,4 @@ data_load:
   log_artifacts: true
   log_summary_stats: true
   log_sample_artifacts: true
+

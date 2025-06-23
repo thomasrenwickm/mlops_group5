@@ -30,16 +30,22 @@ logging.basicConfig(
 )
 logger = logging.getLogger("model")
 
-
 def df_hash(df: pd.DataFrame) -> str:
     """Deterministic hash of a DataFrame (values + index)."""
     return hashlib.sha256(
         pd.util.hash_pandas_object(df, index=True).values
     ).hexdigest()
 
-
+#@hydra.main(config_path=str(PROJECT_ROOT), config_name="config", version_base=None)
+###
 @hydra.main(config_path=str(PROJECT_ROOT), config_name="config", version_base=None)
+
+
+###
 def main(cfg: DictConfig) -> None:
+    # 👇 ADD THIS EXACT LINE HERE
+    os.chdir(PROJECT_ROOT)
+    ###
     cfg_dict = OmegaConf.to_container(cfg, resolve=True)
     run_name = f"model_{datetime.now():%Y%m%d_%H%M%S}"
 
@@ -54,7 +60,6 @@ def main(cfg: DictConfig) -> None:
     logger.info("Started WandB run: %s", run_name)
 
     try:
-        # ─────────────────────────────── data ────────────────────────────────
         data_art = run.use_artifact("validated_data:latest")
         with tempfile.TemporaryDirectory() as tmp_dir:
             data_path = data_art.download(root=tmp_dir)
@@ -63,7 +68,6 @@ def main(cfg: DictConfig) -> None:
             if os.path.isfile(data_file):
                 df = pd.read_csv(data_file)
             else:
-                # Fallback to raw split artifact
                 split_art = run.use_artifact("splits:latest")
                 split_path = split_art.download(root=tmp_dir)
                 train_df = pd.read_csv(os.path.join(split_path, "train.csv"))
@@ -95,33 +99,16 @@ def main(cfg: DictConfig) -> None:
         if cfg.data_load.get("log_sample_artifacts", True):
             wandb.log({"train_sample_rows": wandb.Table(dataframe=df.head(50))})
 
-        # ────────────────────────────── training ─────────────────────────────
-        run_model_pipeline(df, cfg_dict)  # your function saves model & metrics
+        run_model_pipeline(df, cfg_dict)
 
-        # ─────────────────────────────── metrics ─────────────────────────────
-        #report_dict, *_ = generate_report(cfg_dict)
-        #flat = {}
-        #for split, metrics in report_dict.items():
-            #for k, v in metrics.items():
-                #if isinstance(v, dict):
-                    #for sk, sv in v.items():
-                        #flat[f"{split}_{k}_{sk}"] = sv
-                #else:
-                    #flat[f"{split}_{k}"] = v
-        #wandb.summary.update(flat)
-
-        # ────────────────────────────── artifacts ────────────────────────────
         if cfg.data_load.get("log_artifacts", True):
             art_specs = [
-                ("model_path", "model.pkl", "model"),
+                ("model", "model.pkl", "model"),
                 ("preprocessing_pipeline", "preprocessing_pipeline.pkl", "pipeline"),
                 ("metrics_path", "metrics.json", "metrics"),
             ]
             for cfg_key, default_name, art_type in art_specs:
-                p = PROJECT_ROOT / cfg.artifacts.get("models", "models") / default_name
-                # allow override in config
-                if cfg_key in cfg.artifacts:
-                    p = PROJECT_ROOT / cfg.artifacts[cfg_key]
+                p = PROJECT_ROOT / cfg.artifacts.get(cfg_key, f"models/{default_name}")
                 if p.is_file():
                     art = wandb.Artifact(art_type, type=art_type)
                     if art_type == "model":
@@ -138,7 +125,6 @@ def main(cfg: DictConfig) -> None:
                     run.log_artifact(art, aliases=["latest"])
                     logger.info("Logged %s artifact to W&B", art_type)
 
-            # Log raw train/valid/test splits for reproducibility
             splits_dir = PROJECT_ROOT / cfg.artifacts.get("splits_dir", "data/splits")
             split_files = [splits_dir / f for f in ["train.csv", "valid.csv", "test.csv"]]
             if all(f.is_file() for f in split_files):
@@ -148,7 +134,6 @@ def main(cfg: DictConfig) -> None:
                 run.log_artifact(splits_art, aliases=["latest"])
                 logger.info("Logged splits artifact to W&B")
 
-            # Log processed train/valid/test splits for evaluation stage
             processed_dir = PROJECT_ROOT / cfg.artifacts.get("processed_dir", "data/processed")
             proc_files = [processed_dir / f for f in [
                 "train_processed.csv", "valid_processed.csv", "test_processed.csv"
@@ -167,7 +152,6 @@ def main(cfg: DictConfig) -> None:
     finally:
         wandb.finish()
         logger.info("WandB run finished")
-
 
 if __name__ == "__main__":
     main()
