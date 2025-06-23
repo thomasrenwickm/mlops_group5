@@ -627,3 +627,7 @@ data_load:
   log_artifacts: true
   log_summary_stats: true
   log_sample_artifacts: true
+
+inference:
+  input_csv: data/inference/new_data.csv
+  output_csv: data/inference/output_predictions.csv
