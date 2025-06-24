@@ -4,6 +4,7 @@ test_data_loader.py
 Unit tests for data_loader.py with correct mocking strategy.
 """
 
+from src.data_load.data_loader import load_config, load_env, load_data, get_data
 import pytest
 import pandas as pd
 import os
@@ -12,8 +13,6 @@ from unittest.mock import patch, mock_open, MagicMock, ANY
 import sys
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, project_root)
-
-from src.data_load.data_loader import load_config, load_env, load_data, get_data
 
 
 @pytest.fixture
@@ -84,7 +83,8 @@ class TestLoadEnv:
         load_env(".env")
 
         mock_isfile.assert_called_once_with(".env")
-        mock_load_dotenv.assert_called_once_with(dotenv_path=".env", override=True)
+        mock_load_dotenv.assert_called_once_with(
+            dotenv_path=".env", override=True)
         mock_logger.info.assert_called_once()
 
     @patch('src.data_load.data_loader.logger')
@@ -157,7 +157,8 @@ class TestLoadData:
     @patch('pathlib.Path.exists')
     def test_load_data_excel_multiple_sheets(self, mock_exists, mock_read_excel, mock_logger):
         mock_exists.return_value = True
-        mock_read_excel.return_value = {"Sheet1": pd.DataFrame(), "Sheet2": pd.DataFrame()}
+        mock_read_excel.return_value = {
+            "Sheet1": pd.DataFrame(), "Sheet2": pd.DataFrame()}
 
         with pytest.raises(ValueError, match="Multiple sheets detected"):
             load_data("test.xlsx", file_type="excel")
@@ -259,7 +260,8 @@ class TestGetData:
         mock_load_config.return_value = config
         mock_load_data.return_value = sample_dataframe
 
-        result = get_data(config_path="custom_config.yaml", env_path="custom.env", data_stage="raw")
+        result = get_data(config_path="custom_config.yaml",
+                          env_path="custom.env", data_stage="raw")
 
         assert result.equals(sample_dataframe)
         mock_load_env.assert_called_once_with("custom.env")
