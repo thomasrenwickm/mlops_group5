@@ -37,8 +37,11 @@ with FEATURES_PATH.open("r") as f:
 
 
 # === FastAPI App ===
-app = FastAPI()
-
+app = FastAPI(
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
+)
 
 # === Define Minimal Required Input Schema ===
 # These are the MINIMAL fields needed to engineer features
