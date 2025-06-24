@@ -45,20 +45,10 @@ app = FastAPI(
 
 # === Define Minimal Required Input Schema ===
 # These are the MINIMAL fields needed to engineer features
+
+
 class PredictionInput(BaseModel):
-    # overall_qual: int
-    # gr_liv_area: float
-    # garage_cars: int
-    # total_bsmt_sf: float = Field(..., alias="Total Bsmt SF")
-    # bsmt_full_bath: int = Field(..., alias="Bsmt Full Bath")
-    # bsmt_half_bath: int = Field(..., alias="Bsmt Half Bath")
-    # full_bath: int = Field(..., alias="Full Bath")
-    # half_bath: int = Field(..., alias="Half Bath")
-    # year_built: int = Field(..., alias="Year Built")
-    # year_remod_add: int = Field(..., alias="Year Remod/Add")
-    # yr_sold: int = Field(..., alias="Yr Sold")
-    # first_flr_sf: int = Field(..., alias="1st Flr SF")
-    # second_flr_sf: int = Field(..., alias="2nd Flr SF")
+
     overall_qual: int = Field(..., alias="Overall Qual")
     gr_liv_area: float = Field(..., alias="Gr Liv Area")
     garage_cars: int = Field(..., alias="Garage Cars")
@@ -138,19 +128,87 @@ class PredictionInput(BaseModel):
         validate_by_name = True
         json_schema_extra = {
             "example": {
-                "overall_qual": 7,
-                "gr_liv_area": 1800,
-                "garage_cars": 2,
-                "Total Bsmt SF": 850,
-                "Bsmt Full Bath": 1,
-                "Bsmt Half Bath": 0,
-                "Full Bath": 2,
-                "Half Bath": 1,
-                "Year Built": 2005,
-                "Year Remod/Add": 2015,
-                "1st Flr SF": 1000,
-                "2nd Flr SF": 800,
-                "Yr Sold": 2020
+
+                "PID": 526350040,
+                "MS SubClass": 20,
+                "MS Zoning": "RH",
+                "Lot Frontage": 80.0,
+                "Lot Area": 11622,
+                "Street": "Pave",
+                "Alley": 'NA',
+                "Lot Shape": "Reg",
+                "Land Contour": "Lvl",
+                "Utilities": "AllPub",
+                "Lot Config": "Inside",
+                "Land Slope": "Gtl",
+                "Neighborhood": "NAmes",
+                "Condition 1": "Feedr",
+                "Condition 2": "Norm",
+                "Bldg Type": "1Fam",
+                "House Style": "1Story",
+                "Overall Qual": 5,
+                "Overall Cond": 6,
+                "Year Built": 1961,
+                "Year Remod/Add": 1961,
+                "Roof Style": "Gable",
+                "Roof Matl": "CompShg",
+                "Exterior 1st": "VinylSd",
+                "Exterior 2nd": "VinylSd",
+                "Mas Vnr Type": "None",
+                "Mas Vnr Area": 0.0,
+                "Exter Qual": "TA",
+                "Exter Cond": "TA",
+                "Foundation": "CBlock",
+                "Bsmt Qual": "TA",
+                "Bsmt Cond": "TA",
+                "Bsmt Exposure": "No",
+                "BsmtFin Type 1": "Rec",
+                "BsmtFin SF 1": 468.0,
+                "BsmtFin Type 2": "LwQ",
+                "BsmtFin SF 2": 144.0,
+                "Bsmt Unf SF": 270.0,
+                "Total Bsmt SF": 882.0,
+                "Heating": "GasA",
+                "Heating QC": "TA",
+                "Central Air": "Y",
+                "Electrical": "SBrkr",
+                "1st Flr SF": 896,
+                "2nd Flr SF": 0,
+                "Low Qual Fin SF": 0,
+                "Gr Liv Area": 896,
+                "Bsmt Full Bath": 0.0,
+                "Bsmt Half Bath": 0.0,
+                "Full Bath": 1,
+                "Half Bath": 0,
+                "Bedroom AbvGr": 2,
+                "Kitchen AbvGr": 1,
+                "Kitchen Qual": "TA",
+                "TotRms AbvGr": 5,
+                "Functional": "Typ",
+                "Fireplaces": 0,
+                "Fireplace Qu": 'NA',
+                "Garage Type": "Attchd",
+                "Garage Yr Blt": 1961.0,
+                "Garage Finish": "Unf",
+                "Garage Cars": 1.0,
+                "Garage Area": 730.0,
+                "Garage Qual": "TA",
+                "Garage Cond": "TA",
+                "Paved Drive": "Y",
+                "Wood Deck SF": 140,
+                "Open Porch SF": 0,
+                "Enclosed Porch": 0,
+                "3Ssn Porch": 0,
+                "Screen Porch": 120,
+                "Pool Area": 0,
+                "Pool QC": 'NA',
+                "Fence": "MnPrv",
+                "Misc Feature": 'NA',
+                "Misc Val": 0,
+                "Mo Sold": 6,
+                "Yr Sold": 2010,
+                "Sale Type": "WD",
+                "Sale Condition": "Normal"
             }
         }
 
@@ -188,7 +246,7 @@ def predict(payload: PredictionInput):
         # Reorder
         df_proc = df_proc[SELECTED_FEATURES]
 
-        # 🚨 Check final shape
+        # Check final shape
         if df_proc.shape[0] == 0 or df_proc.shape[1] == 0:
             raise HTTPException(
                 status_code=500, detail="Preprocessed input is empty — check column names or data content.")
@@ -210,18 +268,3 @@ def predict(payload: PredictionInput):
     except Exception as e:
         raise HTTPException(
             status_code=500, detail=f"Prediction failed: {str(e)}")
-
-
-@app.post("/predict_batch")
-def predict_batch(payloads: list[PredictionInput]):
-    try:
-        df = pd.DataFrame([p.dict(by_alias=True) for p in payloads])
-        df = clean_raw_data(df, CONFIG)
-        df = engineer_features(df, CONFIG)
-        df_proc = transform_with_pipeline(df, CONFIG, PIPELINE)
-        df_final = df_proc[SELECTED_FEATURES]
-        preds = MODEL.predict(df_final)
-        return [{"prediction": float(p)} for p in preds]
-    except Exception as e:
-        raise HTTPException(
-            status_code=400, detail=f"Batch prediction failed: {str(e)}")
