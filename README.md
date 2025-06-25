@@ -301,6 +301,7 @@ flake8 .
 
 Developed by:
 
+- Tara Teylouni
 - Shadi Alfaraj  
 - Yotaro Enomoto  
 - Thomas Renwick  
