@@ -11,6 +11,7 @@ metrics evaluation, and model persistence.
 import os
 import logging
 import pickle
+from pathlib import Path
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
@@ -19,7 +20,7 @@ from preprocess.preprocessing import (
     fit_and_save_pipeline,
 )
 from evaluation.evaluation import evaluate_regression
-from pathlib import Path
+
 
 logger = logging.getLogger(__name__)
 
