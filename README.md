@@ -123,3 +123,15 @@ For feedback or questions, contact any team member or open an issue.
 - Fully automated pipeline using **MLflow Projects**, **Hydra**, and **Weights & Biases**
 - Supports end-to-end training, evaluation, and inference with traceable experiments and artifacts
 - For reference or rollback, check [this release/tag](https://github.com/thomasrenwickm/mlops_group5/releases/tag/v1.0)
+- 
+
+### v2.0-ci/cd-pipeline-automation
+
+- Introduced CI/CD pipeline for model deployment and delivery
+- **CI** powered by GitHub Actions
+- **CD** implemented with:
+  - Docker for containerization
+  - FastAPI for serving the model via REST API
+  - Render.com for cloud hosting the API
+- Improves automation, reproducibility, and accessibility for production-ready ML workflows
+- For reference or rollback, check [this release/tag](https://github.com/thomasrenwickm/mlops_group5/releases/tag/v2.0-ci%2Fcd-pipeline-automation)
