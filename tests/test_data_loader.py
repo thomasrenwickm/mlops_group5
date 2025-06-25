@@ -9,6 +9,7 @@ import pytest
 import pandas as pd
 import os
 from unittest.mock import patch, mock_open, MagicMock, ANY
+from pathlib import Path  # Import Path to mock its methods directly
 
 import sys
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -110,6 +111,8 @@ class TestLoadData:
         result = load_data("test.csv", file_type="csv")
 
         assert result.equals(sample_dataframe)
+        # assert_called() is sufficient here because Path() might be called multiple times internally
+        # (e.g., Path(path), then resolving to raw_path, then calling exists() on raw_path)
         mock_exists.assert_called()
         mock_read_csv.assert_called_once_with(
             ANY, delimiter=",", header=0, encoding="utf-8"
@@ -275,15 +278,21 @@ class TestIntegration:
     @patch('yaml.safe_load')
     @patch('builtins.open', new_callable=mock_open)
     @patch('os.path.isfile')
-    def test_full_workflow(self, mock_isfile, mock_file, mock_yaml, mock_read_csv,
+    @patch('pathlib.Path.exists')  # <-- ADD THIS LINE
+    def test_full_workflow(self, mock_exists, mock_isfile, mock_file, mock_yaml, mock_read_csv,
                            mock_load_dotenv, sample_config, sample_dataframe):
+        # Set return values for your mocks
         mock_isfile.return_value = True
         mock_yaml.return_value = sample_config
         mock_read_csv.return_value = sample_dataframe
+        mock_exists.return_value = True  # <-- ADD THIS LINE
 
         result = get_data(data_stage="raw")
 
         assert result.equals(sample_dataframe)
         mock_yaml.assert_called_once()
         mock_read_csv.assert_called_once()
+        # mock_isfile is called for config.yaml, and potentially by load_dotenv
+        # mock_exists is called when load_data checks for the file path
         assert mock_isfile.call_count >= 1
+        assert mock_exists.call_count >= 1  # Assert that exists was called at least once
