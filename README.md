@@ -123,7 +123,6 @@ For feedback or questions, contact any team member or open an issue.
 - Fully automated pipeline using **MLflow Projects**, **Hydra**, and **Weights & Biases**
 - Supports end-to-end training, evaluation, and inference with traceable experiments and artifacts
 - For reference or rollback, check [this release/tag](https://github.com/thomasrenwickm/mlops_group5/releases/tag/v1.0)
-- 
 
 ### v2.0-ci/cd-pipeline-automation
 
