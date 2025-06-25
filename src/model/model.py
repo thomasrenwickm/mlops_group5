@@ -15,7 +15,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.feature_selection import SelectKBest, f_regression
-from src.preprocess.preprocessing import (
+from preprocess.preprocessing import (
     fit_and_save_pipeline,
 )
 from src.evaluation.evaluation import evaluate_regression
