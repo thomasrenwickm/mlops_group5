@@ -18,7 +18,7 @@ from sklearn.feature_selection import SelectKBest, f_regression
 from preprocess.preprocessing import (
     fit_and_save_pipeline,
 )
-from src.evaluation.evaluation import evaluate_regression
+from evaluation.evaluation import evaluate_regression
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
