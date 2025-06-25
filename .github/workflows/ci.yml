@@ -28,4 +28,5 @@ jobs:
     #   - name: Set PYTHONPATH
     #     run: echo "PYTHONPATH=${{ github.workspace }}" >> $GITHUB_ENV
       - name: Run tests
-        run: pytest tests/test_data_loader.py # pytest -q
+        run: export PYTHONPATH=$(pwd)
+          pytest -q # pytest -q
